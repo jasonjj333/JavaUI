@@ -23,7 +23,7 @@ public class GuiTest2 {
 
     frame.add(label);
     frame.setVisible(true);
-    frame.pack(); //frame size will adjust to fit all labels in frame
+    //frame.pack(); //frame size will adjust to fit all labels in frame
 
     }   
 }
