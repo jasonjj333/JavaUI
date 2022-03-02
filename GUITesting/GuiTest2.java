@@ -1,3 +1,5 @@
+package GUITesting;
+
 import java.awt.Color;
 import java.awt.Font;
 
