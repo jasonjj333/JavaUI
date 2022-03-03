@@ -24,4 +24,5 @@ Return the correct String of the desired cmd command when execute button is pres
 Make an executable for this program. 
 Add a style. 
 Add icons. 
+Fix Frame icon to not take in hard coded location of RealArgoIcon.png.
 Add remaining selection features when given. 

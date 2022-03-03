@@ -224,7 +224,10 @@ public class UIFramework2 implements ActionListener, MouseListener {
         }
         if(e.getSource() == executeButton) {
             System.out.println("Executing...");
-            if(response == JFileChooser.APPROVE_OPTION && !selectedLocation.equals("")) {
+            if(outputLocationChoices.getSelectedIndex()==2) {
+                System.out.println("Database Selected.");
+            }
+            else if(response == JFileChooser.APPROVE_OPTION && !selectedLocation.equals("")) {
                 System.out.println("Local location: " + selectedLocation);
             }
             if(cycleNumberBox.isSelected()) {
@@ -245,6 +248,12 @@ public class UIFramework2 implements ActionListener, MouseListener {
                 if(response == JFileChooser.APPROVE_OPTION) {
                     selectedLocation = openDirectory.getSelectedFile().getAbsolutePath();
                 }
+                else {
+                    outputLocationChoices.setSelectedIndex(0);
+                }
+            }
+            else if(outputLocationChoices.getSelectedIndex() == 2) {
+                //implement code for when location output: database is selected.
             }
         }
         
