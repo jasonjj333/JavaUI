@@ -4,7 +4,7 @@
 A java program using Swing that will create a GUI for Argo Data's Item Generator program.
 
 ## How to run:
-Build and run UITest.java as it is the main Runner for UIFramework2.java. UIFramework.java was an initial attempt and will be deleted
+Build and run **UITest.java** as it is the main Runner for UIFramework2.java. UIFramework.java was an initial attempt and will be deleted
 or renamed. UIFramework2.java creates the UI. 
 
 ## What is implemented:
