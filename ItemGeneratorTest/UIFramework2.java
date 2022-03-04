@@ -236,37 +236,58 @@ public class UIFramework2 implements ActionListener, MouseListener {
             }
         }
         if(e.getSource() == executeButton) {
-            System.out.println("Executing...");
-            String output = "";
-            output += ".\\ItemGenerator ";
-            if(outputLocationChoices.getSelectedIndex()==2) {
-                System.out.println("Database Selected.");
-                output+= "-p \"Database\" ";
+            boolean valid = true;
+            //need to validate
+            try {
+                int d = Integer.parseInt(cycleNumberField.getText());
+            } catch (NumberFormatException nfe) {
+                System.out.println("Cycle Number needs to be an Integer.");
+                valid = false;
             }
-            else if(response == JFileChooser.APPROVE_OPTION && !selectedLocation.equals("")) {
-                System.out.println("Local location: " + selectedLocation);
-                output += "-p "+ selectedLocation;
+            try {
+                int f = Integer.parseInt(maxItemsField.getText());
+            } catch (NumberFormatException nfe) {
+                System.out.println("Max Items needs to be an Integer.");
+                valid = false;
             }
-            if(cycleNumberBox.isSelected() && !cycleNumberField.getText().equals("")) {
-                System.out.println("Cycle Number: " + cycleNumberField.getText());
-                output += " -c "+ cycleNumberField.getText();
-            }
-            else {
-                output += " -c "+ CYCLENUMBERDEFAULT;
-            }
-            if(maxItemsBox.isSelected()&& !maxItemsField.getText().equals("")) {
-                System.out.println("Max Items: " + maxItemsField.getText());
-                output += " --maxitems "+maxItemsField.getText();
-            }
-            else {
-                output += " --maxitems "+MAXITEMSDEFAULT;
-            }
-            if(aifDebitsOnlyBox.isSelected()) {
-                System.out.println("AIF Debits Only is selected.");
-                output += " --aif";
+            if(outputLocationChoices.getSelectedIndex() == 0) {
+                System.out.println("Please select output location.");
+                valid = false;
             }
 
-            System.out.print("CMD Command: " + output);
+            if(valid) {
+                System.out.println("Executing...");
+                String output = "";
+                output += ".\\ItemGenerator ";
+                if(outputLocationChoices.getSelectedIndex()==2) {
+                    System.out.println("Database Selected.");
+                    output+= "-p \"Database\" ";
+                }
+                else if(response == JFileChooser.APPROVE_OPTION && !selectedLocation.equals("")) {
+                    System.out.println("Local location: " + selectedLocation);
+                    output += "-p "+ selectedLocation;
+                }
+                if(cycleNumberBox.isSelected() && !cycleNumberField.getText().equals("")) {
+                    System.out.println("Cycle Number: " + cycleNumberField.getText());
+                    output += " -c "+ cycleNumberField.getText();
+                }
+                else {
+                    output += " -c "+ CYCLENUMBERDEFAULT;
+                }
+                if(maxItemsBox.isSelected()&& !maxItemsField.getText().equals("")) {
+                    System.out.println("Max Items: " + maxItemsField.getText());
+                    output += " --maxitems "+maxItemsField.getText();
+                }
+                else {
+                    output += " --maxitems "+MAXITEMSDEFAULT;
+                }
+                if(aifDebitsOnlyBox.isSelected()) {
+                    System.out.println("AIF Debits Only is selected.");
+                    output += " --aif";
+                }
+
+                System.out.print("CMD Command: " + output);
+            }
         }
         if(e.getSource() == outputLocationChoices) {
             if(outputLocationChoices.getSelectedIndex() == 1) {
