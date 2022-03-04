@@ -4,8 +4,9 @@
 A java program using Swing that will create a GUI for Argo Data's Item Generator program.
 
 ## How to run:
-Build and run **UITest.java** as it is the main Runner for UIFramework2.java. UIFramework.java was an initial attempt and will be deleted
-or renamed. UIFramework2.java creates the UI. UIFramework3.java is an update currently in work to use custom icons and layout.
+Build and run **UITest.java** as it is the main Runner for UIFramework3.java. UIFramework.java was an initial attempt and will be deleted
+or renamed. UIFramework2.java previously created the UI. UIFramework3.java is an update currently in work to use custom icons and layout 
+currently creates the UI.
 
 ## What is implemented:
 - **Output location** combo box created to select local/database location. File Chooser opens to
@@ -18,7 +19,8 @@ selected.
 - **Execute** Button created. Prints information on output location, cycle number, max items,
 and aif debits only if selected. 
 - Return the correct String of the desired cmd command when execute button is pressed.
-- 
+- Added more testing to catch most user error on current features.
+- Changed to null layout and added custom icons
 ## What to work on: 
 - Validate all entries are reasonable when execute is pressed. (Needs Check box testing).
 - Make an executable for this program. 
