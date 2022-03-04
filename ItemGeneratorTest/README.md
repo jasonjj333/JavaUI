@@ -17,12 +17,11 @@ selected.
 - **AIF Debits Only** check box reated.
 - **Execute** Button created. Prints information on output location, cycle number, max items,
 and aif debits only if selected. 
-
-## What to work on: 
-- Validate all entries are reasonable when execute is pressed. (Max Items is not a String).
 - Return the correct String of the desired cmd command when execute button is pressed.
+- 
+## What to work on: 
+- Validate all entries are reasonable when execute is pressed. (Needs Check box testing).
 - Make an executable for this program. 
 - Add a style. 
 - Add icons. 
-- Fix Frame icon to not take in hard coded location of RealArgoIcon.png.
 - Add remaining selection features when given. 
