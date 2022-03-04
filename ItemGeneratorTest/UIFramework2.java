@@ -23,6 +23,8 @@ import javax.swing.JTextField;
 import javax.swing.LayoutStyle;
 
 public class UIFramework2 implements ActionListener, MouseListener {
+    static String CYCLENUMBERDEFAULT = "030";
+    static String MAXITEMSDEFAULT = "20";
     JFrame itemGeneratorFrame;
     JFileChooser openDirectory;
     int response;
@@ -37,10 +39,13 @@ public class UIFramework2 implements ActionListener, MouseListener {
     JButton executeButton;
     JLabel outputLocationLabel;
     JComboBox<String> outputLocationChoices;
+    JLabel localLabel;
     boolean cycleNumberFirstTime = true;
     boolean maxItemsFirstTime = true;
 
     public UIFramework2() {
+        String CYCLENUMBERDEFAULT = "030";
+        String MAXITEMSDEFAULT = "20";
         response = JFileChooser.CANCEL_OPTION;
         selectedLocation = "";
         itemGeneratorFrame = new JFrame();
@@ -55,6 +60,7 @@ public class UIFramework2 implements ActionListener, MouseListener {
         executeButton = new JButton();
         outputLocationLabel = new JLabel();
         outputLocationChoices = new JComboBox<String>();
+        localLabel = new JLabel();
 
         itemGeneratorFrame.setLocationRelativeTo(null);
         itemGeneratorFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -74,7 +80,7 @@ public class UIFramework2 implements ActionListener, MouseListener {
 
         cycleNumberField.setFont(new Font("Bahnschrift", 0, 10));
         cycleNumberField.setForeground(new Color(102, 102, 102));
-        cycleNumberField.setText("ex) 030");
+        cycleNumberField.setText("030");
         cycleNumberField.setCaretColor(new Color(204, 204, 204));
         cycleNumberField.setDisabledTextColor(new Color(204, 204, 204));
         cycleNumberField.setEditable(false);
@@ -89,7 +95,7 @@ public class UIFramework2 implements ActionListener, MouseListener {
 
         maxItemsField.setFont(new Font("Arial", 0, 10)); // NOI18N
         maxItemsField.setForeground(new Color(102, 102, 102));
-        maxItemsField.setText("ex) 20");
+        maxItemsField.setText("20");
         maxItemsField.setCaretColor(new Color(204, 204, 204));
         maxItemsField.setDisabledTextColor(new Color(204, 204, 204));
         maxItemsField.setEditable(false);
@@ -113,6 +119,10 @@ public class UIFramework2 implements ActionListener, MouseListener {
         outputLocationLabel.setForeground(new Color(161, 61, 61));
         outputLocationLabel.setText("Output Location");
 
+        localLabel.setFont(new Font("Bahnschrift", 0, 12));
+        localLabel.setForeground(new Color(161, 61, 61));
+        localLabel.setText("");
+
         outputLocationChoices.setForeground(new Color(161, 61, 61));
         outputLocationChoices.setModel(new DefaultComboBoxModel<>(new String[] { "Choose..", "Local", "Database" }));
         outputLocationChoices.setToolTipText("Select the output location");
@@ -132,6 +142,7 @@ public class UIFramework2 implements ActionListener, MouseListener {
                 .addGroup(customizationPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
                     .addComponent(outputLocationChoices, GroupLayout.PREFERRED_SIZE, 99, GroupLayout.PREFERRED_SIZE)
                     .addComponent(outputLocationLabel, GroupLayout.PREFERRED_SIZE, 99, GroupLayout.PREFERRED_SIZE)
+                    .addComponent(localLabel, GroupLayout.PREFERRED_SIZE, 220, GroupLayout.PREFERRED_SIZE)
                     .addGroup(customizationPanelLayout.createSequentialGroup()
                         .addComponent(cycleNumberBox)
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
@@ -150,6 +161,8 @@ public class UIFramework2 implements ActionListener, MouseListener {
                 .addComponent(outputLocationLabel)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(outputLocationChoices, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(localLabel)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(customizationPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                     .addComponent(cycleNumberBox)
@@ -224,21 +237,36 @@ public class UIFramework2 implements ActionListener, MouseListener {
         }
         if(e.getSource() == executeButton) {
             System.out.println("Executing...");
+            String output = "";
+            output += ".\\ItemGenerator ";
             if(outputLocationChoices.getSelectedIndex()==2) {
                 System.out.println("Database Selected.");
+                output+= "-p \"Database\" ";
             }
             else if(response == JFileChooser.APPROVE_OPTION && !selectedLocation.equals("")) {
                 System.out.println("Local location: " + selectedLocation);
+                output += "-p "+ selectedLocation;
             }
-            if(cycleNumberBox.isSelected()) {
+            if(cycleNumberBox.isSelected() && !cycleNumberField.getText().equals("")) {
                 System.out.println("Cycle Number: " + cycleNumberField.getText());
+                output += " -c "+ cycleNumberField.getText();
             }
-            if(maxItemsBox.isSelected()) {
+            else {
+                output += " -c "+ CYCLENUMBERDEFAULT;
+            }
+            if(maxItemsBox.isSelected()&& !maxItemsField.getText().equals("")) {
                 System.out.println("Max Items: " + maxItemsField.getText());
+                output += " --maxitems "+maxItemsField.getText();
+            }
+            else {
+                output += " --maxitems "+MAXITEMSDEFAULT;
             }
             if(aifDebitsOnlyBox.isSelected()) {
                 System.out.println("AIF Debits Only is selected.");
+                output += " --aif";
             }
+
+            System.out.print("CMD Command: " + output);
         }
         if(e.getSource() == outputLocationChoices) {
             if(outputLocationChoices.getSelectedIndex() == 1) {
@@ -247,13 +275,20 @@ public class UIFramework2 implements ActionListener, MouseListener {
                 response = openDirectory.showOpenDialog(null);
                 if(response == JFileChooser.APPROVE_OPTION) {
                     selectedLocation = openDirectory.getSelectedFile().getAbsolutePath();
+                    localLabel.setText(selectedLocation);
                 }
                 else {
                     outputLocationChoices.setSelectedIndex(0);
                 }
             }
             else if(outputLocationChoices.getSelectedIndex() == 2) {
+                localLabel.setText("");
+                selectedLocation = "";
                 //implement code for when location output: database is selected.
+            }
+            else if(outputLocationChoices.getSelectedIndex() == 0) {
+                localLabel.setText("");
+                selectedLocation = "";
             }
         }
         
