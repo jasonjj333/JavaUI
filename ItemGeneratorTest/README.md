@@ -14,7 +14,7 @@ current directory when local is selected and allows user to select desired direc
 selected.
 - **Max Items** check box and text field created. Text field can only be edited when check box is 
 selected.
-- **AIF Debits Only** check box reated.
+- **AIF Debits Only** check box created.
 - **Execute** Button created. Prints information on output location, cycle number, max items,
 and aif debits only if selected. 
 - Return the correct String of the desired cmd command when execute button is pressed.
