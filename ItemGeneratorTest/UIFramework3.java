@@ -7,12 +7,15 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Rectangle;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Stack;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -27,24 +30,30 @@ import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle;
-import javax.swing.plaf.synth.SynthComboBoxUI;
-import javax.swing.plaf.synth.SynthStyle;
+import java.awt.geom.RoundRectangle2D;
+import java.awt.FontFormatException;
+import java.awt.GraphicsEnvironment;
 
 public class UIFramework3 implements ActionListener, MouseListener {
     static String CYCLENUMBERDEFAULT = "030";
     static String MAXITEMSDEFAULT = "20";
+    static Color BACKGROUNDCOLOR = new Color(61, 73, 86);
+    static Color FOREGROUNDCOLOR = new Color(230, 64, 64);
+    static Color TEXTCOLOR = new Color(255, 255, 255);
+    static Color DARKCOLOR = new Color(61,61,61,255);
+    static Color DARKTEXTCOLOR = new Color(158,158,158);
     JFrame itemGeneratorFrame;
     JFileChooser openDirectory;
     int response;
     String selectedLocation;
     JPanel titlePanel;
     JPanel customizationPanel;
-    JCheckBox cycleNumberBox;
+    OvalCheck cycleNumberBox;
     JTextField cycleNumberField;
-    JCheckBox maxItemsBox;
+    OvalCheck maxItemsBox;
     JTextField maxItemsField;
-    JCheckBox aifDebitsOnlyBox;
-    JButton executeButton;
+    OvalCheck aifDebitsOnlyBox;
+    OvalButton executeButton;
     JLabel outputLocationLabel;
     JComboBox<String> outputLocationChoices;
     boolean cycleNumberFirstTime = true;
@@ -52,7 +61,10 @@ public class UIFramework3 implements ActionListener, MouseListener {
     JLabel logoLabel;
     JLabel localLabel;
     ImageIcon executeSelectedIcon;
-
+    JLabel textIconLabel;
+    JButton closeButton;
+    Font openSans16;
+    ImageIcon checkIcon;
     public UIFramework3() {
 
         //Initialize Global Variables
@@ -62,123 +74,165 @@ public class UIFramework3 implements ActionListener, MouseListener {
         openDirectory = new JFileChooser();
         titlePanel = new JPanel();
         customizationPanel = new JPanel();
-        cycleNumberBox = new JCheckBox();
+        cycleNumberBox = new OvalCheck(OvalCheck.SHAPE_CAPSULE,OvalCheck.HORIZONTAL, FOREGROUNDCOLOR, FOREGROUNDCOLOR, FOREGROUNDCOLOR, TEXTCOLOR);
         cycleNumberField = new JTextField(5);
-        maxItemsBox = new JCheckBox();
-        maxItemsField = new JTextField();
-        aifDebitsOnlyBox = new JCheckBox();
-        executeButton = new JButton();
+        maxItemsBox = new OvalCheck(OvalCheck.SHAPE_CAPSULE,OvalCheck.HORIZONTAL, FOREGROUNDCOLOR, FOREGROUNDCOLOR, FOREGROUNDCOLOR, TEXTCOLOR);
+        maxItemsField = new JTextField(5);
+        aifDebitsOnlyBox = new OvalCheck(OvalCheck.SHAPE_CAPSULE,OvalCheck.HORIZONTAL, FOREGROUNDCOLOR, FOREGROUNDCOLOR, FOREGROUNDCOLOR, TEXTCOLOR);
+        executeButton = new OvalButton(OvalButton.SHAPE_CAPSULE,OvalButton.HORIZONTAL, FOREGROUNDCOLOR, FOREGROUNDCOLOR, FOREGROUNDCOLOR, TEXTCOLOR);
         outputLocationLabel = new JLabel();
         outputLocationChoices = new JComboBox<String>();
         logoLabel = new JLabel();
         localLabel = new JLabel();
+        textIconLabel = new JLabel();
+        closeButton = new JButton();
+        
 
         //Local Variables
         int componentHeight = 0;
         int verticalGap = 20;
         //Icon Font Open Sans
-        //Website logomakr
         //Create Images/Icons
         ImageIcon argoIcon = new ImageIcon(".\\ItemGeneratorTest\\Images\\RealArgoIcon.png");
         ImageIcon argoLogo = new ImageIcon(".\\ItemGeneratorTest\\Images\\ArgoLogo.png");
         ImageIcon aifNotSelectedIcon = new ImageIcon(".\\ItemGeneratorTest\\Images\\AIFDebitsOnlyNotSelected.png");
         ImageIcon aifSelectedIcon = new ImageIcon(".\\ItemGeneratorTest\\Images\\AIFDebitsOnlySelected2.png");
-        ImageIcon cycleNumberSelectedIcon = new ImageIcon(".\\ItemGeneratorTest\\Images\\CycleNumberSelected2.png");
-        ImageIcon cycleNumberNotSelectedIcon = new ImageIcon(".\\ItemGeneratorTest\\Images\\CycleNumberNotSelected.png");
         ImageIcon maxItemsNotSelectedIcon = new ImageIcon(".\\ItemGeneratorTest\\Images\\MaxItemsNotSelected.png");
         ImageIcon maxItemsSelectedIcon = new ImageIcon(".\\ItemGeneratorTest\\Images\\MaxItemsSelected.png");
-        ImageIcon selectLocationIcon = new ImageIcon(".\\ItemGeneratorTest\\Images\\SelectLocationIcon.png");
-        ImageIcon executeIcon = new ImageIcon(".\\ItemGeneratorTest\\Images\\ExecuteIcon.png");
-        ImageIcon executeSelectedIcon = new ImageIcon(".\\ItemGeneratorTest\\Images\\ExecuteSelectedIcon.png");
+        ImageIcon closeIcon = new ImageIcon(".\\ItemGeneratorTest\\Images\\CloseIcon.png");
+        checkIcon = new ImageIcon(".\\ItemGeneratorTest\\Images\\CheckIcon.png");
         logoLabel.setIcon(argoLogo);
+
+        //Fonts
+        try {
+            openSans16 = Font.createFont(Font.TRUETYPE_FONT, new File(".\\ItemGeneratorTest\\Fonts\\OpenSans-Regular.ttf")).deriveFont(16f);
+            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+            ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File(".\\ItemGeneratorTest\\Fonts\\OpenSans-Regular.ttf")));
+        }
+        catch(IOException | FontFormatException e) {
+        
+        }
         
         //Item Generator Frame
         //Set size should be 1000 x 600 but due to only small subset of features
         //added so far, dimensions are reduced
-        itemGeneratorFrame.setSize(300,600);
         itemGeneratorFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         itemGeneratorFrame.setLayout(null);
         itemGeneratorFrame.setIconImage(argoIcon.getImage());
+        itemGeneratorFrame.setUndecorated(true);
+        //itemGeneratorFrame.setShape(new RoundRectangle2D.Double(10, 10, 100, 100, 50, 50));
+        itemGeneratorFrame.setSize(1000,600);
+        itemGeneratorFrame.setBackground(new Color(1.0f,1.0f,1.0f,0.0f));
+        itemGeneratorFrame.setLocationRelativeTo(null);
 
         //Title Panel
         itemGeneratorFrame.add(titlePanel);
         titlePanel.setBounds(0,0,1000,100);
         titlePanel.setLayout(null);
-        titlePanel.setBackground(new Color(255,0,47,255));
+        titlePanel.setBackground(FOREGROUNDCOLOR);
         titlePanel.add(logoLabel);
         logoLabel.setBounds(30,0, 100, 100);
 
+        //Close Button
+        titlePanel.add(closeButton);
+        closeButton.setBounds(titlePanel.getWidth()-60, 10, 60,60);
+        closeButton.setIcon(closeIcon);
+        closeButton.setOpaque(false);
+        closeButton.setContentAreaFilled(false);
+        closeButton.setBorderPainted(false);
+        closeButton.setFocusable(false);
+        closeButton.addActionListener(this);
+
+
         //Customization Panel
-        itemGeneratorFrame.setLocationRelativeTo(null);
         itemGeneratorFrame.add(customizationPanel);
         customizationPanel.setBounds(0,100,1000,500);
-        customizationPanel.setBackground(new Color(26,26,26,255));
+        customizationPanel.setBackground(BACKGROUNDCOLOR);
         customizationPanel.setLayout(null);
 
         //Output Location
         customizationPanel.add(outputLocationLabel);
         customizationPanel.add(outputLocationChoices);
         customizationPanel.add(localLabel);
-        outputLocationLabel.setBounds(10, componentHeight+verticalGap, 220, 15);
-        outputLocationLabel.setIcon(selectLocationIcon);
+        outputLocationLabel.setBounds(10, componentHeight+verticalGap, 220, 20);
+        outputLocationLabel.setText("Select Output Location");
+        outputLocationLabel.setFont(openSans16);
+        outputLocationLabel.setForeground(FOREGROUNDCOLOR);
+        //outputLocationLabel.setIcon(selectLocationIcon);
         componentHeight += outputLocationLabel.getHeight()+verticalGap;
 
         outputLocationChoices.setBounds(20,componentHeight+verticalGap,100,36);
         outputLocationChoices.setBackground(new Color(59,59,59,255));
-        outputLocationChoices.setForeground(new Color(255,0,47,255));
-        outputLocationChoices.setFont(new Font("SansSerif", Font.PLAIN, 16));
+        outputLocationChoices.setForeground(FOREGROUNDCOLOR);
+        outputLocationChoices.setFont(openSans16);
         outputLocationChoices.setModel(new DefaultComboBoxModel<>(new String[] { "Choose..", "Local", "Database" }));
         outputLocationChoices.setToolTipText("Select the output location");
         outputLocationChoices.addActionListener(this);
         outputLocationChoices.setFocusable(false);
 
         localLabel.setBounds((int)outputLocationChoices.getLocation().getX()+outputLocationChoices.getWidth()+10, componentHeight+verticalGap, 100, 36);
-        localLabel.setFont(new Font("SansSerif", Font.PLAIN, 14));
-        localLabel.setForeground(new Color(161, 61, 61));
+        localLabel.setFont(openSans16);
+        localLabel.setForeground(FOREGROUNDCOLOR);
         localLabel.setText("");
 
         componentHeight += outputLocationChoices.getHeight()+verticalGap;
+
         //Cycle Number
         customizationPanel.add(cycleNumberBox);
         customizationPanel.add(cycleNumberField);
+        cycleNumberBox.setBounds(15,componentHeight+verticalGap,190,36);
+        cycleNumberBox.setText("Cycle Number");
+        cycleNumberBox.setForeground(TEXTCOLOR);
+        cycleNumberBox.setFont(openSans16);
+        cycleNumberBox.setRadius(.16);
+        cycleNumberBox.setBorderThickness(0);
+        cycleNumberBox.setHorizontalAlignment(JCheckBox.CENTER);
 
-        cycleNumberBox.setBounds(0,componentHeight+verticalGap,190,36);
-        cycleNumberBox.setOpaque(false);
-        cycleNumberBox.setIcon(cycleNumberNotSelectedIcon);
-        cycleNumberBox.setSelectedIcon(cycleNumberSelectedIcon);
+        //cycleNumberBox.setOpaque(false);
+        //cycleNumberBox.setIcon(cycleNumberNotSelectedIcon);
+        //cycleNumberBox.setSelectedIcon(cycleNumberSelectedIcon);
         cycleNumberBox.addActionListener(this);
 
-        cycleNumberField.setBounds(210,componentHeight+verticalGap,60,36);
+        cycleNumberField.setBounds(220,componentHeight+verticalGap,60,36);
         cycleNumberField.setBackground(new Color(59,59,59,255));
-        cycleNumberField.setCaretColor(new Color(255,0,47,255));
-        cycleNumberField.setForeground(new Color(158, 158, 158));
+        cycleNumberField.setCaretColor(FOREGROUNDCOLOR);
+        cycleNumberField.setForeground(DARKTEXTCOLOR);
         cycleNumberField.setText("030");
         cycleNumberField.setEditable(false);
-        cycleNumberField.setFont(new Font("Open Sans", Font.PLAIN, 18));
+        cycleNumberField.setFont(openSans16);
         cycleNumberField.setBorder(BorderFactory.createEmptyBorder());
         cycleNumberField.addMouseListener(this);
+        cycleNumberField.setHorizontalAlignment(JCheckBox.RIGHT);
+        //textIconLabel.setBounds(cycleNumberField.getX() + cycleNumberField.getWidth(), cycleNumberField.getY(), 36,36);
+        //textIconLabel.setIcon(textFieldDisabledIcon);
+        //textIconLabel.setBackground(Color.WHITE);
+
         componentHeight += cycleNumberBox.getHeight()+verticalGap;
+
         
         //Max Items
         customizationPanel.add(maxItemsBox);
         customizationPanel.add(maxItemsField);
 
-        maxItemsBox.setBounds(0,componentHeight + verticalGap, 190, 36);
-        maxItemsBox.setOpaque(false);
-        maxItemsBox.setIcon(maxItemsNotSelectedIcon);
-        maxItemsBox.setSelectedIcon(maxItemsSelectedIcon);
+        maxItemsBox.setBounds(15,componentHeight + verticalGap, 190, 36);
+        maxItemsBox.setText("Max Items");
+        maxItemsBox.setFont(openSans16);
+        maxItemsBox.setForeground(TEXTCOLOR);
+        maxItemsBox.setRadius(.16);
+        maxItemsBox.setBorderThickness(0);
+        maxItemsBox.setHorizontalAlignment(JCheckBox.CENTER);
         maxItemsBox.addActionListener(this);
         
 
-        maxItemsField.setBounds(210,componentHeight+verticalGap,60,36);
-        maxItemsField.setFont(new Font("Open Sans", Font.PLAIN, 18));
+        maxItemsField.setBounds(220,componentHeight+verticalGap,60,36);
+        maxItemsField.setFont(openSans16);
         maxItemsField.setText("20");
-        maxItemsField.setDisabledTextColor(new Color(61,61,61,255));
         maxItemsField.setBackground(new Color(59,59,59,255));
-        maxItemsField.setCaretColor(new Color(255,0,47,255));
-        maxItemsField.setForeground(new Color(158, 158, 158));
+        maxItemsField.setCaretColor(FOREGROUNDCOLOR);
+        maxItemsField.setForeground(DARKTEXTCOLOR);
         maxItemsField.setEditable(false);
         maxItemsField.setBorder(BorderFactory.createEmptyBorder());
+        maxItemsField.setHorizontalAlignment(JCheckBox.RIGHT);
         maxItemsField.addMouseListener(this);
 
         componentHeight += maxItemsBox.getHeight()+verticalGap;
@@ -186,10 +240,15 @@ public class UIFramework3 implements ActionListener, MouseListener {
         //AIF Debits Only Check Box
         //Dimensions of icon 177x36 px
         customizationPanel.add(aifDebitsOnlyBox);
-        aifDebitsOnlyBox.setBounds(0,componentHeight + verticalGap, 200, 40);
+        aifDebitsOnlyBox.setBounds(15,componentHeight + verticalGap, 190, 36);
         aifDebitsOnlyBox.setOpaque(false);
-        aifDebitsOnlyBox.setIcon(aifNotSelectedIcon);
-        aifDebitsOnlyBox.setSelectedIcon(aifSelectedIcon);
+        aifDebitsOnlyBox.setText("AIF Debits Only");
+        aifDebitsOnlyBox.setIcon(checkIcon);
+        aifDebitsOnlyBox.setFont(openSans16);
+        aifDebitsOnlyBox.setHorizontalAlignment(JCheckBox.CENTER);
+        aifDebitsOnlyBox.setForeground(TEXTCOLOR);
+        aifDebitsOnlyBox.setRadius(.16);
+        aifDebitsOnlyBox.setBorderThickness(0);
         aifDebitsOnlyBox.addActionListener(this);
 
         componentHeight += aifDebitsOnlyBox.getHeight()+verticalGap;
@@ -197,14 +256,15 @@ public class UIFramework3 implements ActionListener, MouseListener {
         //Execute Button
         customizationPanel.add(executeButton);
 
-        executeButton.setBounds(16, componentHeight + verticalGap, 178, 32);
-        executeButton.setOpaque(false);
-        executeButton.setIcon(executeIcon);
-        executeButton.setBackground(new Color(26,26,26,255));
+        executeButton.setBounds(16, componentHeight + verticalGap, 190, 36);
+        executeButton.setText("Execute");
+        executeButton.setFont(openSans16);
+        executeButton.setForeground(TEXTCOLOR);
+        executeButton.setBorderThickness(0);
+        executeButton.setRadius(.16);
         executeButton.setBorder(BorderFactory.createEmptyBorder());
         executeButton.addActionListener(this);
         executeButton.setFocusable(false);
-        executeButton.setPressedIcon(executeSelectedIcon);
 
         componentHeight += executeButton.getHeight()+verticalGap;
 
@@ -256,25 +316,52 @@ public class UIFramework3 implements ActionListener, MouseListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        
+        if(e.getSource() == closeButton) {
+            itemGeneratorFrame.setVisible(false); //you can't see me!
+            itemGeneratorFrame.dispose(); //Destroy the JFrame object
+        }
         if(e.getSource() == cycleNumberBox) {
             if(cycleNumberBox.isSelected()) {
-                cycleNumberField.setForeground(new Color(255,0,47,255));
+                cycleNumberField.setForeground(FOREGROUNDCOLOR);
                 cycleNumberField.setEditable(true);
+                cycleNumberBox.setColorNormal(TEXTCOLOR);
+                cycleNumberBox.setForeground(FOREGROUNDCOLOR);
+                cycleNumberBox.setColorHighlighted(TEXTCOLOR);
             }
             else {
-                cycleNumberField.setForeground(new Color(158, 158, 158));
+                cycleNumberField.setForeground(DARKTEXTCOLOR);
                 cycleNumberField.setEditable(false);
+                cycleNumberBox.setColorNormal(FOREGROUNDCOLOR);
+                cycleNumberBox.setForeground(TEXTCOLOR);
+                cycleNumberBox.setColorHighlighted(FOREGROUNDCOLOR);
             }
         }
         if(e.getSource() == maxItemsBox) {
             if(maxItemsBox.isSelected()) {
-                maxItemsField.setForeground(new Color(255,0,47,255));
+                maxItemsField.setForeground(FOREGROUNDCOLOR);
                 maxItemsField.setEditable(true);
+                maxItemsBox.setColorNormal(TEXTCOLOR);
+                maxItemsBox.setForeground(FOREGROUNDCOLOR);
+                maxItemsBox.setColorHighlighted(TEXTCOLOR);
             }
             else {
-                maxItemsField.setForeground(new Color(158, 158, 158));
+                maxItemsField.setForeground(DARKTEXTCOLOR);
                 maxItemsField.setEditable(false);
+                maxItemsBox.setColorNormal(FOREGROUNDCOLOR);
+                maxItemsBox.setForeground(TEXTCOLOR);
+                maxItemsBox.setColorHighlighted(FOREGROUNDCOLOR);
+            }
+        }
+        if(e.getSource() == aifDebitsOnlyBox) {
+            if(aifDebitsOnlyBox.isSelected()) {
+                aifDebitsOnlyBox.setColorNormal(TEXTCOLOR);
+                aifDebitsOnlyBox.setForeground(FOREGROUNDCOLOR);
+                aifDebitsOnlyBox.setColorHighlighted(TEXTCOLOR);
+            }
+            else {
+                aifDebitsOnlyBox.setColorNormal(FOREGROUNDCOLOR);
+                aifDebitsOnlyBox.setForeground(TEXTCOLOR);
+                aifDebitsOnlyBox.setColorHighlighted(FOREGROUNDCOLOR);
             }
         }
         if(e.getSource() == executeButton) {
