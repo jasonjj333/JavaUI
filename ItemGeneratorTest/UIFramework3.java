@@ -65,6 +65,9 @@ public class UIFramework3 implements ActionListener, MouseListener {
     JButton closeButton;
     Font openSans16;
     ImageIcon checkIcon;
+    JPanel dragPanel;
+    JLabel minimizeButton;
+
     public UIFramework3() {
 
         //Initialize Global Variables
@@ -86,7 +89,8 @@ public class UIFramework3 implements ActionListener, MouseListener {
         localLabel = new JLabel();
         textIconLabel = new JLabel();
         closeButton = new JButton();
-        
+        dragPanel = new JPanel();
+        minimizeButton = new JLabel();
 
         //Local Variables
         int componentHeight = 0;
@@ -133,15 +137,36 @@ public class UIFramework3 implements ActionListener, MouseListener {
         titlePanel.add(logoLabel);
         logoLabel.setBounds(30,0, 100, 100);
 
+        //makes window able to be dragged
+        titlePanel.add(dragPanel);
+        dragPanel.setBounds(0,0,900,100);
+        PanelDragListener panelDragListener = new PanelDragListener(dragPanel,itemGeneratorFrame);
+        dragPanel.addMouseListener(panelDragListener);
+        dragPanel.addMouseMotionListener(panelDragListener);
+        dragPanel.setOpaque(false);
+
         //Close Button
         titlePanel.add(closeButton);
-        closeButton.setBounds(titlePanel.getWidth()-60, 10, 60,60);
-        closeButton.setIcon(closeIcon);
+        closeButton.setBounds(titlePanel.getWidth()-50, 0, 50,30);
+        closeButton.setText("X");
+        closeButton.setFont(openSans16);
+        closeButton.setForeground(TEXTCOLOR);
+        //closeButton.setIcon(closeIcon);
         closeButton.setOpaque(false);
         closeButton.setContentAreaFilled(false);
         closeButton.setBorderPainted(false);
         closeButton.setFocusable(false);
         closeButton.addActionListener(this);
+
+        //Minimize Button
+        titlePanel.add(minimizeButton);
+        minimizeButton.setBounds(closeButton.getX()-30,-2,30,30);
+        minimizeButton.setText("__");
+        minimizeButton.setFont(openSans16);
+        minimizeButton.setForeground(TEXTCOLOR);
+        minimizeButton.setOpaque(false);
+        minimizeButton.setFocusable(false);
+        minimizeButton.addMouseListener(this);
 
 
         //Customization Panel
@@ -275,6 +300,9 @@ public class UIFramework3 implements ActionListener, MouseListener {
 
     @Override
     public void mouseClicked(MouseEvent e) {
+        if(e.getSource() == minimizeButton) {
+            itemGeneratorFrame.setState(JFrame.ICONIFIED);
+        }
         if(e.getSource() == cycleNumberField) {
             if(cycleNumberFirstTime && cycleNumberBox.isSelected()) {
                 cycleNumberFirstTime = false;
