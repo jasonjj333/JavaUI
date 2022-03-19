@@ -21,9 +21,9 @@ and aif debits only if selected.
 - Return the correct String of the desired cmd command when execute button is pressed.
 - Added more testing to catch most user error on current features.
 - Changed to null layout and added custom icons
+- **All buttons currently validated for error**
+- **Minimize and Exit Buttons** Created and functional
+- **Draggable Window** Window can now be moved by holding top of frame with cursor and dragging. 
 ## What to work on: 
-- Validate all entries are reasonable when execute is pressed. (Needs Check box testing).
-- Make an executable for this program. 
-- Add a style. 
-- Add icons. 
+- Make an executable for this program.
 - Add remaining selection features when given. 
