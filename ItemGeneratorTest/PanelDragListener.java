@@ -1,5 +1,6 @@
 package ItemGeneratorTest;
 
+
 import java.awt.event.MouseAdapter;
 
 import javax.swing.JFrame;

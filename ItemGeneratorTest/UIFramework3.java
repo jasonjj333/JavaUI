@@ -1,5 +1,6 @@
 package ItemGeneratorTest;
 
+
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
@@ -52,7 +53,7 @@ public class UIFramework3 implements ActionListener, MouseListener {
     JTextField cycleNumberField;
     OvalCheck maxItemsBox;
     JTextField maxItemsField;
-    OvalCheck aifDebitsOnlyBox;
+    OvalCheck aifBox;
     OvalButton executeButton;
     JLabel outputLocationLabel;
     JComboBox<String> outputLocationChoices;
@@ -81,7 +82,7 @@ public class UIFramework3 implements ActionListener, MouseListener {
         cycleNumberField = new JTextField(5);
         maxItemsBox = new OvalCheck(OvalCheck.SHAPE_CAPSULE,OvalCheck.HORIZONTAL, FOREGROUNDCOLOR, FOREGROUNDCOLOR, FOREGROUNDCOLOR, TEXTCOLOR);
         maxItemsField = new JTextField(5);
-        aifDebitsOnlyBox = new OvalCheck(OvalCheck.SHAPE_CAPSULE,OvalCheck.HORIZONTAL, FOREGROUNDCOLOR, FOREGROUNDCOLOR, FOREGROUNDCOLOR, TEXTCOLOR);
+        aifBox = new OvalCheck(OvalCheck.SHAPE_CAPSULE,OvalCheck.HORIZONTAL, FOREGROUNDCOLOR, FOREGROUNDCOLOR, FOREGROUNDCOLOR, TEXTCOLOR);
         executeButton = new OvalButton(OvalButton.SHAPE_CAPSULE,OvalButton.HORIZONTAL, FOREGROUNDCOLOR, FOREGROUNDCOLOR, FOREGROUNDCOLOR, TEXTCOLOR);
         outputLocationLabel = new JLabel();
         outputLocationChoices = new JComboBox<String>();
@@ -99,11 +100,6 @@ public class UIFramework3 implements ActionListener, MouseListener {
         //Create Images/Icons
         ImageIcon argoIcon = new ImageIcon(".\\ItemGeneratorTest\\Images\\RealArgoIcon.png");
         ImageIcon argoLogo = new ImageIcon(".\\ItemGeneratorTest\\Images\\ArgoLogo.png");
-        ImageIcon aifNotSelectedIcon = new ImageIcon(".\\ItemGeneratorTest\\Images\\AIFDebitsOnlyNotSelected.png");
-        ImageIcon aifSelectedIcon = new ImageIcon(".\\ItemGeneratorTest\\Images\\AIFDebitsOnlySelected2.png");
-        ImageIcon maxItemsNotSelectedIcon = new ImageIcon(".\\ItemGeneratorTest\\Images\\MaxItemsNotSelected.png");
-        ImageIcon maxItemsSelectedIcon = new ImageIcon(".\\ItemGeneratorTest\\Images\\MaxItemsSelected.png");
-        ImageIcon closeIcon = new ImageIcon(".\\ItemGeneratorTest\\Images\\CloseIcon.png");
         checkIcon = new ImageIcon(".\\ItemGeneratorTest\\Images\\CheckIcon.png");
         logoLabel.setIcon(argoLogo);
 
@@ -264,19 +260,19 @@ public class UIFramework3 implements ActionListener, MouseListener {
 
         //AIF Debits Only Check Box
         //Dimensions of icon 177x36 px
-        customizationPanel.add(aifDebitsOnlyBox);
-        aifDebitsOnlyBox.setBounds(15,componentHeight + verticalGap, 190, 36);
-        aifDebitsOnlyBox.setOpaque(false);
-        aifDebitsOnlyBox.setText("AIF Debits Only");
-        aifDebitsOnlyBox.setIcon(checkIcon);
-        aifDebitsOnlyBox.setFont(openSans16);
-        aifDebitsOnlyBox.setHorizontalAlignment(JCheckBox.CENTER);
-        aifDebitsOnlyBox.setForeground(TEXTCOLOR);
-        aifDebitsOnlyBox.setRadius(.16);
-        aifDebitsOnlyBox.setBorderThickness(0);
-        aifDebitsOnlyBox.addActionListener(this);
+        customizationPanel.add(aifBox);
+        aifBox.setBounds(15,componentHeight + verticalGap, 190, 36);
+        aifBox.setOpaque(false);
+        aifBox.setText("AIF");
+        aifBox.setIcon(checkIcon);
+        aifBox.setFont(openSans16);
+        aifBox.setHorizontalAlignment(JCheckBox.CENTER);
+        aifBox.setForeground(TEXTCOLOR);
+        aifBox.setRadius(.16);
+        aifBox.setBorderThickness(0);
+        aifBox.addActionListener(this);
 
-        componentHeight += aifDebitsOnlyBox.getHeight()+verticalGap;
+        componentHeight += aifBox.getHeight()+verticalGap;
 
         //Execute Button
         customizationPanel.add(executeButton);
@@ -380,16 +376,16 @@ public class UIFramework3 implements ActionListener, MouseListener {
                 maxItemsBox.setColorHighlighted(FOREGROUNDCOLOR);
             }
         }
-        if(e.getSource() == aifDebitsOnlyBox) {
-            if(aifDebitsOnlyBox.isSelected()) {
-                aifDebitsOnlyBox.setColorNormal(TEXTCOLOR);
-                aifDebitsOnlyBox.setForeground(FOREGROUNDCOLOR);
-                aifDebitsOnlyBox.setColorHighlighted(TEXTCOLOR);
+        if(e.getSource() == aifBox) {
+            if(aifBox.isSelected()) {
+                aifBox.setColorNormal(TEXTCOLOR);
+                aifBox.setForeground(FOREGROUNDCOLOR);
+                aifBox.setColorHighlighted(TEXTCOLOR);
             }
             else {
-                aifDebitsOnlyBox.setColorNormal(FOREGROUNDCOLOR);
-                aifDebitsOnlyBox.setForeground(TEXTCOLOR);
-                aifDebitsOnlyBox.setColorHighlighted(FOREGROUNDCOLOR);
+                aifBox.setColorNormal(FOREGROUNDCOLOR);
+                aifBox.setForeground(TEXTCOLOR);
+                aifBox.setColorHighlighted(FOREGROUNDCOLOR);
             }
         }
         if(e.getSource() == executeButton) {
@@ -425,7 +421,7 @@ public class UIFramework3 implements ActionListener, MouseListener {
             if(valid) {
                 System.out.println("Executing...");
                 String output = "";
-                output += ".\\ItemGenerator ";
+                output += ".\\bin\\ItemGenerator ";
                 if(outputLocationChoices.getSelectedIndex()==2) {
                     System.out.println("Database Selected.");
                     output+= "-p \"Database\" ";
@@ -448,8 +444,8 @@ public class UIFramework3 implements ActionListener, MouseListener {
                 else {
                     output += " --maxitems "+MAXITEMSDEFAULT;
                 }
-                if(aifDebitsOnlyBox.isSelected()) {
-                    System.out.println("AIF Debits Only is selected.");
+                if(aifBox.isSelected()) {
+                    System.out.println("AIF is selected.");
                     output += " --aif";
                 }
 
