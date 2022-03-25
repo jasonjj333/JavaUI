@@ -24,6 +24,10 @@ and aif debits only if selected.
 - **All buttons currently validated for error**
 - **Minimize and Exit Buttons** Created and functional
 - **Draggable Window** Window can now be moved by holding top of frame with cursor and dragging. 
+- **Rounded Border** added and colors changed to give more modern theme easier on eyes
 ## What to work on: 
 - Make an executable for this program.
 - Add remaining selection features when given. 
+- find way to import file and image folders to jar file
+- create settings so user can change and save theme or create their own color scheme
+- change argo image to shapes created in swing (and change to different seeable color based on user selection)
