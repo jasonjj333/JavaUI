@@ -121,8 +121,9 @@ public class UIFramework3 implements ActionListener, MouseListener {
         itemGeneratorFrame.setIconImage(argoIcon.getImage());
         itemGeneratorFrame.setUndecorated(true);
         //itemGeneratorFrame.setShape(new RoundRectangle2D.Double(10, 10, 100, 100, 50, 50));
-        itemGeneratorFrame.setSize(1000,600);
         itemGeneratorFrame.setBackground(new Color(1.0f,1.0f,1.0f,0.0f));
+        itemGeneratorFrame.setShape(new RoundRectangle2D.Double(0, 0, 1000, 600, 25, 25));
+        itemGeneratorFrame.setSize(1000,600);
         itemGeneratorFrame.setLocationRelativeTo(null);
 
         //Title Panel
