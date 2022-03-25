@@ -38,9 +38,9 @@ import java.awt.GraphicsEnvironment;
 public class UIFramework3 implements ActionListener, MouseListener {
     static String CYCLENUMBERDEFAULT = "030";
     static String MAXITEMSDEFAULT = "20";
-    static Color BACKGROUNDCOLOR = new Color(61, 73, 86);
-    static Color FOREGROUNDCOLOR = new Color(230, 64, 64);
-    static Color TEXTCOLOR = new Color(255, 255, 255);
+    static Color BACKGROUNDCOLOR = new Color(6, 44, 48);
+    static Color FOREGROUNDCOLOR = new Color(5, 89, 91);
+    static Color TEXTCOLOR = new Color(245, 245, 245);
     static Color DARKCOLOR = new Color(61,61,61,255);
     static Color DARKTEXTCOLOR = new Color(158,158,158);
     JFrame itemGeneratorFrame;
@@ -178,13 +178,13 @@ public class UIFramework3 implements ActionListener, MouseListener {
         outputLocationLabel.setBounds(10, componentHeight+verticalGap, 220, 20);
         outputLocationLabel.setText("Select Output Location");
         outputLocationLabel.setFont(openSans16);
-        outputLocationLabel.setForeground(FOREGROUNDCOLOR);
+        outputLocationLabel.setForeground(TEXTCOLOR);
         //outputLocationLabel.setIcon(selectLocationIcon);
         componentHeight += outputLocationLabel.getHeight()+verticalGap;
 
         outputLocationChoices.setBounds(20,componentHeight+verticalGap,100,36);
         outputLocationChoices.setBackground(new Color(59,59,59,255));
-        outputLocationChoices.setForeground(FOREGROUNDCOLOR);
+        outputLocationChoices.setForeground(TEXTCOLOR);
         outputLocationChoices.setFont(openSans16);
         outputLocationChoices.setModel(new DefaultComboBoxModel<>(new String[] { "Choose..", "Local", "Database" }));
         outputLocationChoices.setToolTipText("Select the output location");
@@ -193,7 +193,7 @@ public class UIFramework3 implements ActionListener, MouseListener {
 
         localLabel.setBounds((int)outputLocationChoices.getLocation().getX()+outputLocationChoices.getWidth()+10, componentHeight+verticalGap, 100, 36);
         localLabel.setFont(openSans16);
-        localLabel.setForeground(FOREGROUNDCOLOR);
+        localLabel.setForeground(TEXTCOLOR);
         localLabel.setText("");
 
         componentHeight += outputLocationChoices.getHeight()+verticalGap;
@@ -346,7 +346,7 @@ public class UIFramework3 implements ActionListener, MouseListener {
         }
         if(e.getSource() == cycleNumberBox) {
             if(cycleNumberBox.isSelected()) {
-                cycleNumberField.setForeground(FOREGROUNDCOLOR);
+                cycleNumberField.setForeground(TEXTCOLOR);
                 cycleNumberField.setEditable(true);
                 cycleNumberBox.setColorNormal(TEXTCOLOR);
                 cycleNumberBox.setForeground(FOREGROUNDCOLOR);
@@ -362,7 +362,7 @@ public class UIFramework3 implements ActionListener, MouseListener {
         }
         if(e.getSource() == maxItemsBox) {
             if(maxItemsBox.isSelected()) {
-                maxItemsField.setForeground(FOREGROUNDCOLOR);
+                maxItemsField.setForeground(TEXTCOLOR);
                 maxItemsField.setEditable(true);
                 maxItemsBox.setColorNormal(TEXTCOLOR);
                 maxItemsBox.setForeground(FOREGROUNDCOLOR);
