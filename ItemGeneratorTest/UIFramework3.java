@@ -4,6 +4,10 @@ package ItemGeneratorTest;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.GradientPaint;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -31,15 +35,16 @@ import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle;
+import javax.swing.UIManager;
+
 import java.awt.geom.RoundRectangle2D;
 import java.awt.FontFormatException;
 import java.awt.GraphicsEnvironment;
-
 public class UIFramework3 implements ActionListener, MouseListener {
     static String CYCLENUMBERDEFAULT = "030";
     static String MAXITEMSDEFAULT = "20";
-    static Color BACKGROUNDCOLOR = new Color(6, 44, 48);
-    static Color FOREGROUNDCOLOR = new Color(5, 89, 91);
+    static Color BACKGROUNDCOLOR = (Color.decode("#261C2C"));
+    static Color FOREGROUNDCOLOR = Color.decode("#5C527F");
     static Color TEXTCOLOR = new Color(245, 245, 245);
     static Color DARKCOLOR = new Color(61,61,61,255);
     static Color DARKTEXTCOLOR = new Color(158,158,158);
@@ -68,7 +73,6 @@ public class UIFramework3 implements ActionListener, MouseListener {
     ImageIcon checkIcon;
     JPanel dragPanel;
     JLabel minimizeButton;
-
     public UIFramework3() {
 
         //Initialize Global Variables
@@ -76,8 +80,38 @@ public class UIFramework3 implements ActionListener, MouseListener {
         selectedLocation = "";
         itemGeneratorFrame = new JFrame();
         openDirectory = new JFileChooser();
-        titlePanel = new JPanel();
-        customizationPanel = new JPanel();
+        titlePanel = new JPanel()  {
+            @Override
+            protected void paintComponent(Graphics grphcs) {
+                super.paintComponent(grphcs);
+                Graphics2D g2d = (Graphics2D) grphcs;
+                g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                        RenderingHints.VALUE_ANTIALIAS_ON);
+                GradientPaint gp = new GradientPaint(0, 0,
+                        getBackground(), 0, getHeight(),
+                        getBackground());
+                g2d.setPaint(gp);
+                g2d.fillRect(0, 0, getWidth(), getHeight()); 
+    
+            }
+    
+        };
+        customizationPanel = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics grphcs) {
+                super.paintComponent(grphcs);
+                Graphics2D g2d = (Graphics2D) grphcs;
+                g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                        RenderingHints.VALUE_ANTIALIAS_ON);
+                GradientPaint gp = new GradientPaint(0, 0,
+                        getBackground().brighter(), 0, getHeight(),
+                        getBackground().darker());
+                g2d.setPaint(gp);
+                g2d.fillRect(0, 0, getWidth(), getHeight()); 
+    
+            }
+    
+        };
         cycleNumberBox = new OvalCheck(OvalCheck.SHAPE_CAPSULE,OvalCheck.HORIZONTAL, FOREGROUNDCOLOR, FOREGROUNDCOLOR, FOREGROUNDCOLOR, TEXTCOLOR);
         cycleNumberField = new JTextField(5);
         maxItemsBox = new OvalCheck(OvalCheck.SHAPE_CAPSULE,OvalCheck.HORIZONTAL, FOREGROUNDCOLOR, FOREGROUNDCOLOR, FOREGROUNDCOLOR, TEXTCOLOR);
@@ -92,26 +126,33 @@ public class UIFramework3 implements ActionListener, MouseListener {
         closeButton = new JButton();
         dragPanel = new JPanel();
         minimizeButton = new JLabel();
-
         //Local Variables
         int componentHeight = 0;
         int verticalGap = 20;
         //Icon Font Open Sans
         //Create Images/Icons
-        ImageIcon argoIcon = new ImageIcon(".\\ItemGeneratorTest\\Images\\RealArgoIcon.png");
-        ImageIcon argoLogo = new ImageIcon(".\\ItemGeneratorTest\\Images\\ArgoLogo.png");
-        checkIcon = new ImageIcon(".\\ItemGeneratorTest\\Images\\CheckIcon.png");
+        ImageIcon argoIcon = new ImageIcon("./ItemGeneratorTest/Images/RealArgoIcon.png");
+        ImageIcon argoLogo = new ImageIcon("./ItemGeneratorTest/Images/ArgoLogo.png");
+        checkIcon = new ImageIcon("./ItemGeneratorTest/Images/CheckIcon.png");
         logoLabel.setIcon(argoLogo);
 
         //Fonts
         try {
-            openSans16 = Font.createFont(Font.TRUETYPE_FONT, new File(".\\ItemGeneratorTest\\Fonts\\OpenSans-Regular.ttf")).deriveFont(16f);
+            openSans16 = Font.createFont(Font.TRUETYPE_FONT, new File("./ItemGeneratorTest/Fonts/OpenSans-Regular.ttf")).deriveFont(16f);
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-            ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File(".\\ItemGeneratorTest\\Fonts\\OpenSans-Regular.ttf")));
+            ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File("./ItemGeneratorTest/Fonts/OpenSans-Regular.ttf")));
         }
         catch(IOException | FontFormatException e) {
         
         }
+        //Style
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        }catch(Exception ex) {
+            ex.printStackTrace();
+        }
+        openDirectory.updateUI();
+        openDirectory.setOpaque(false);
         
         //Item Generator Frame
         //Set size should be 1000 x 600 but due to only small subset of features
@@ -128,15 +169,15 @@ public class UIFramework3 implements ActionListener, MouseListener {
 
         //Title Panel
         itemGeneratorFrame.add(titlePanel);
-        titlePanel.setBounds(0,0,1000,100);
+        titlePanel.setBounds(0,0,1000,50);
         titlePanel.setLayout(null);
         titlePanel.setBackground(FOREGROUNDCOLOR);
-        titlePanel.add(logoLabel);
-        logoLabel.setBounds(30,0, 100, 100);
+        //titlePanel.add(logoLabel);
+        //logoLabel.setBounds(30,0, 100, 100);
 
         //makes window able to be dragged
         titlePanel.add(dragPanel);
-        dragPanel.setBounds(0,0,900,100);
+        dragPanel.setBounds(0,0,titlePanel.getWidth()-100,titlePanel.getHeight());
         PanelDragListener panelDragListener = new PanelDragListener(dragPanel,itemGeneratorFrame);
         dragPanel.addMouseListener(panelDragListener);
         dragPanel.addMouseMotionListener(panelDragListener);
@@ -148,7 +189,6 @@ public class UIFramework3 implements ActionListener, MouseListener {
         closeButton.setText("X");
         closeButton.setFont(openSans16);
         closeButton.setForeground(TEXTCOLOR);
-        //closeButton.setIcon(closeIcon);
         closeButton.setOpaque(false);
         closeButton.setContentAreaFilled(false);
         closeButton.setBorderPainted(false);
@@ -168,7 +208,7 @@ public class UIFramework3 implements ActionListener, MouseListener {
 
         //Customization Panel
         itemGeneratorFrame.add(customizationPanel);
-        customizationPanel.setBounds(0,100,1000,500);
+        customizationPanel.setBounds(0,titlePanel.getHeight(),itemGeneratorFrame.getWidth(),itemGeneratorFrame.getHeight()-titlePanel.getHeight());
         customizationPanel.setBackground(BACKGROUNDCOLOR);
         customizationPanel.setLayout(null);
 
