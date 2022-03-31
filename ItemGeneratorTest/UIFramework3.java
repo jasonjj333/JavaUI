@@ -462,7 +462,7 @@ public class UIFramework3 implements ActionListener, MouseListener {
             if(valid) {
                 System.out.println("Executing...");
                 String output = "";
-                output += ".\\bin\\ItemGenerator ";
+                output += "ItemGenerator ";
                 if(outputLocationChoices.getSelectedIndex()==2) {
                     System.out.println("Database Selected.");
                     output+= "-p \"Database\" ";
@@ -491,6 +491,13 @@ public class UIFramework3 implements ActionListener, MouseListener {
                 }
 
                 System.out.print("CMD Command: " + output + "\n");
+                runCommand run = new runCommand();
+                try {
+                    run.excCommand("cd D:\\ItemGen-main\\ItemGenerator\\bin\\Debug && " + output);
+                } catch (IOException e1) {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
+                }
             }
         }
         if(e.getSource() == outputLocationChoices) {
