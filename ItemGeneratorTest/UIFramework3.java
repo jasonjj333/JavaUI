@@ -41,8 +41,8 @@ import java.awt.geom.RoundRectangle2D;
 import java.awt.FontFormatException;
 import java.awt.GraphicsEnvironment;
 public class UIFramework3 implements ActionListener, MouseListener {
-    static String CYCLENUMBERDEFAULT = "030";
-    static String MAXITEMSDEFAULT = "20";
+    static String CYCLENUMBERDEFAULT = "1000";
+    static String MAXITEMSDEFAULT = "10";
     static Color BACKGROUNDCOLOR = (Color.decode("#261C2C"));
     static Color FOREGROUNDCOLOR = Color.decode("#5C527F");
     static Color TEXTCOLOR = new Color(245, 245, 245);
@@ -259,7 +259,7 @@ public class UIFramework3 implements ActionListener, MouseListener {
         cycleNumberField.setBackground(new Color(59,59,59,255));
         cycleNumberField.setCaretColor(FOREGROUNDCOLOR);
         cycleNumberField.setForeground(DARKTEXTCOLOR);
-        cycleNumberField.setText("030");
+        cycleNumberField.setText(CYCLENUMBERDEFAULT);
         cycleNumberField.setEditable(false);
         cycleNumberField.setFont(openSans16);
         cycleNumberField.setBorder(BorderFactory.createEmptyBorder());
