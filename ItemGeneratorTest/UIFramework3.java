@@ -76,6 +76,7 @@ public class UIFramework3 implements ActionListener, MouseListener {
     JScrollPane performanceTextScroller;
     JProgressBar progress;
     int progressCounter;
+    ProgressUpdate updateThread = new ProgressUpdate("update1");
     public UIFramework3() {
 
         //Initialize Global Variables
@@ -517,8 +518,6 @@ public class UIFramework3 implements ActionListener, MouseListener {
                 performanceText.append("Executing...");
                 progress = new JProgressBar(0,Integer.parseInt(maxItemsField.getText()));
                 progress.setStringPainted(true);
-                runCommand r = new runCommand();
-                
                 progress.setForeground(FOREGROUNDCOLOR);
                 progress.setBackground(new Color(59,59,59,255));
                 progress.setBorder(BorderFactory.createEmptyBorder());
@@ -526,63 +525,12 @@ public class UIFramework3 implements ActionListener, MouseListener {
                 progress.setValue(0);
                 customizationPanel.add(progress);
                 progress.setBounds(performanceTextScroller.getX(), 350, 200, 20);
-                progressCounter++;
-            
-                String output = "";
-                output += "ItemGenerator ";
-                if(outputLocationChoices.getSelectedIndex()==2) {
-                    System.out.println("Database Selected.");
-                    performanceText.append("\nDatabase Selected.");
-                    progressCounter++;
-                    progress.setValue(progressCounter);
-                    output+= "-p \"Database\" ";
-                }
-                else if(response == JFileChooser.APPROVE_OPTION && !selectedLocation.equals("")) {
-                    progressCounter++;
-                    progress.setValue(progressCounter);
-                    System.out.println("Local location: " + selectedLocation);
-                    performanceText.append("\nLocal location: " + selectedLocation);
-                    output += "-p "+ selectedLocation;
+                
+                ProgressUpdate updateThread = new ProgressUpdate("update1");
+                updateThread.start();
+                ExecuteUpdate executeThread = new ExecuteUpdate("execute1");
+                executeThread.start();
 
-                }
-                if(cycleNumberBox.isSelected() && !cycleNumberField.getText().equals("")) {
-                    progressCounter++;
-                    progress.setValue(progressCounter);
-                    System.out.println("Cycle Number: " + cycleNumberField.getText());
-                    performanceText.append(("\nCycle Number: " + cycleNumberBox.getText()));
-                    output += " -c "+ cycleNumberField.getText();
-                }
-                else {
-                    output += " -c "+ CYCLENUMBERDEFAULT;
-                }
-                if(maxItemsBox.isSelected()&& !maxItemsField.getText().equals("")) {
-                    progressCounter++;
-                    progress.setValue(progressCounter);
-                    System.out.println("Max Items: " + maxItemsField.getText());
-                    performanceText.append("\nMax Items: " + maxItemsField.getText());
-                    output += " --maxitems "+maxItemsField.getText();
-                }
-                else {
-                    output += " --maxitems "+MAXITEMSDEFAULT;
-                }
-                if(aifBox.isSelected()) {
-                    progressCounter++;
-                    progress.setValue(progressCounter);
-                    System.out.println("AIF is selected.");
-                    performanceText.append("\nAIF is selected.");
-                    output += " --aif";
-                }
-                progressCounter++;
-                progress.setValue(progressCounter);
-                System.out.print("CMD Command: " + output + "\n");
-                performanceText.append("\nCMD Command: " + output);
-
-                try {
-                    excCommand("cd D:\\ItemGen-main\\ItemGenerator\\bin\\Debug && " + output);
-                } catch (IOException e1) {
-                    // TODO Auto-generated catch block
-                    e1.printStackTrace();
-                }
                 
             }
         }
@@ -628,7 +576,108 @@ public class UIFramework3 implements ActionListener, MouseListener {
                 
             }    
     }
+
+    class ProgressUpdate implements Runnable {
+        Thread updateProgress;
+        private String updateProgressName;
+        static volatile boolean exit = false;
+        ProgressUpdate(String name) {
+         updateProgressName = name;
+        }
+
+        @Override
+        public void run() {
+            System.out.println("Thread running" + updateProgressName);
+            while(!exit){
+                progress.setValue(progressCounter);
+                progress.repaint();
+            }
+            System.out.println("Progress Thread closed.");
+        }
+        public void start() {
+            System.out.println("Thread started");
+            if (updateProgress == null) {
+                updateProgress = new Thread(this, updateProgressName);
+                updateProgress.start();
+            }
+        }
+        public void stop() {
+            exit = true;
+        }
+       }
     
+       class ExecuteUpdate implements Runnable {
+        Thread updateExecute;
+        private String updateExecuteName;
+        static volatile boolean exit = false;
+        ExecuteUpdate(String name) {
+         updateExecuteName = name;
+        }
+        @Override
+        public void run() {
+         System.out.println("Thread running" + updateExecuteName);
+            String output = "";
+            output += "ItemGenerator ";
+            if(outputLocationChoices.getSelectedIndex()==2) {
+                System.out.println("Database Selected.");
+                performanceText.append("\nDatabase Selected.");
+                output+= "-p \"Database\" ";
+            }
+            else if(response == JFileChooser.APPROVE_OPTION && !selectedLocation.equals("")) {
+                System.out.println("Local location: " + selectedLocation);
+                performanceText.append("\nLocal location: " + selectedLocation);
+                output += "-p "+ selectedLocation;
+   
+            }
+            if(cycleNumberBox.isSelected() && !cycleNumberField.getText().equals("")) {
+                System.out.println("Cycle Number: " + cycleNumberField.getText());
+                performanceText.append(("\nCycle Number: " + cycleNumberBox.getText()));
+                output += " -c "+ cycleNumberField.getText();
+            }
+            else {
+                output += " -c "+ CYCLENUMBERDEFAULT;
+            }
+            if(maxItemsBox.isSelected()&& !maxItemsField.getText().equals("")) {
+                System.out.println("Max Items: " + maxItemsField.getText());
+                performanceText.append("\nMax Items: " + maxItemsField.getText());
+                output += " --maxitems "+maxItemsField.getText();
+            }
+            else {
+                output += " --maxitems "+MAXITEMSDEFAULT;
+            }
+            if(aifBox.isSelected()) {
+                System.out.println("AIF is selected.");
+                performanceText.append("\nAIF is selected.");
+                output += " --aif";
+            }
+            System.out.print("CMD Command: " + output + "\n");
+            performanceText.append("\nCMD Command: " + output);
+   
+            try {
+                excCommand("cd D:\\ItemGen-main\\ItemGenerator\\bin\\Debug && " + output);
+            } catch (IOException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            }
+                exit = true;
+                updateThread.stop();
+                System.out.println("Execute Thread closed.");
+            
+            
+         
+        }
+        public void start() {
+         System.out.println("Thread started");
+         if (updateExecute == null) {
+          updateExecute = new Thread(this, updateExecuteName);
+          updateExecute.start();
+         }
+        }
+
+        public void stop() {
+            exit = true;
+        }
+       }
 
     
 }
