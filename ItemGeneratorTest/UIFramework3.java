@@ -76,6 +76,7 @@ public class UIFramework3 implements ActionListener, MouseListener {
     JScrollPane performanceTextScroller;
     JProgressBar progress;
     int progressCounter;
+    ProgressUpdate updateThread = new ProgressUpdate("update1");
     public UIFramework3() {
 
         //Initialize Global Variables
@@ -590,10 +591,8 @@ public class UIFramework3 implements ActionListener, MouseListener {
             while(!exit){
                 progress.setValue(progressCounter);
                 progress.repaint();
-                if(progressCounter>= Integer.parseInt(maxItemsField.getText())-1){
-                    exit = true;
-                }
             }
+            System.out.println("Progress Thread closed.");
         }
         public void start() {
             System.out.println("Thread started");
@@ -617,7 +616,6 @@ public class UIFramework3 implements ActionListener, MouseListener {
         @Override
         public void run() {
          System.out.println("Thread running" + updateExecuteName);
-         while(!exit) {
             String output = "";
             output += "ItemGenerator ";
             if(outputLocationChoices.getSelectedIndex()==2) {
@@ -661,12 +659,11 @@ public class UIFramework3 implements ActionListener, MouseListener {
                 // TODO Auto-generated catch block
                 e1.printStackTrace();
             }
-            if(progressCounter>= Integer.parseInt(maxItemsField.getText())){
                 exit = true;
+                updateThread.stop();
                 System.out.println("Execute Thread closed.");
-            }
             
-         }
+            
          
         }
         public void start() {
