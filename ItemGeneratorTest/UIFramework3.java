@@ -17,8 +17,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Stack;
 
@@ -33,9 +35,15 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JPanel;
+import javax.swing.JProgressBar;
+import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.UIManager;
+import javax.swing.plaf.basic.BasicScrollBarUI;
 
 import java.awt.geom.RoundRectangle2D;
 import java.awt.FontFormatException;
@@ -73,6 +81,10 @@ public class UIFramework3 implements ActionListener, MouseListener {
     ImageIcon checkIcon;
     JPanel dragPanel;
     JLabel minimizeButton;
+    JTextArea performanceText;
+    JScrollPane performanceTextScroller;
+    JProgressBar progress;
+    int progressCounter;
     public UIFramework3() {
 
         //Initialize Global Variables
@@ -126,6 +138,10 @@ public class UIFramework3 implements ActionListener, MouseListener {
         closeButton = new JButton();
         dragPanel = new JPanel();
         minimizeButton = new JLabel();
+        performanceText = new JTextArea(500,300);
+        progress = new JProgressBar();
+        performanceTextScroller = new JScrollPane(performanceText);
+        progressCounter = 0;
         //Local Variables
         int componentHeight = 0;
         int verticalGap = 20;
@@ -315,6 +331,52 @@ public class UIFramework3 implements ActionListener, MouseListener {
 
         componentHeight += aifBox.getHeight()+verticalGap;
 
+        //performance text area
+        performanceText.setEditable(false);
+        performanceText.setFocusable(false);
+        performanceTextScroller.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+        performanceTextScroller.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        performanceTextScroller.setBorder(BorderFactory.createEmptyBorder());
+        performanceTextScroller.getVerticalScrollBar().setBackground(BACKGROUNDCOLOR);
+        performanceTextScroller.setFocusable(false);
+        performanceTextScroller.getVerticalScrollBar().setUI(new BasicScrollBarUI() {
+            @Override
+            protected void configureScrollBarColors() {
+                this.thumbColor = FOREGROUNDCOLOR;
+            }
+
+            @Override
+            protected void installComponents(){
+                switch (scrollbar.getOrientation()) {
+                case JScrollBar.VERTICAL:
+                    incrButton = createIncreaseButton(SOUTH);
+                    decrButton = createDecreaseButton(NORTH);
+                    break;
+            
+                case JScrollBar.HORIZONTAL:
+                    if (scrollbar.getComponentOrientation().isLeftToRight()) {    
+                        incrButton = createIncreaseButton(EAST);
+                        decrButton = createDecreaseButton(WEST);
+                    } else {
+                        incrButton = createIncreaseButton(WEST);
+                        decrButton = createDecreaseButton(EAST);
+                    }
+                    break;
+                }
+                //scrollbar.add(incrButton); // Comment out this line to hide arrow
+                //scrollbar.add(decrButton); // Comment out this line to hide arrow
+                // Force the children's enabled state to be updated.
+            scrollbar.setEnabled(scrollbar.isEnabled());
+            }
+        });
+        customizationPanel.add(performanceTextScroller);
+        performanceTextScroller.setBounds(380, 25, 600, 300);maxItemsField.setFont(openSans16);
+        performanceText.setText("Performance Output:");
+        performanceText.setBackground(new Color(59,59,59,255));
+        performanceText.setCaretColor(FOREGROUNDCOLOR);
+        performanceText.setForeground(DARKTEXTCOLOR);
+        performanceText.setBorder(BorderFactory.createEmptyBorder());
+
         //Execute Button
         customizationPanel.add(executeButton);
 
@@ -381,6 +443,7 @@ public class UIFramework3 implements ActionListener, MouseListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        
         if(e.getSource() == closeButton) {
             itemGeneratorFrame.setVisible(false); //you can't see me!
             itemGeneratorFrame.dispose(); //Destroy the JFrame object
@@ -440,6 +503,7 @@ public class UIFramework3 implements ActionListener, MouseListener {
                     int d = Integer.parseInt(cycleNumberField.getText());
                 } catch (NumberFormatException nfe) {
                     System.out.println("Cycle Number needs to be an Integer.");
+                    performanceText.append("Cycle Number needs to be an Integer.");
                     valid = false;
                 }
             }
@@ -451,53 +515,89 @@ public class UIFramework3 implements ActionListener, MouseListener {
                     int f = Integer.parseInt(maxItemsField.getText());
                 } catch (NumberFormatException nfe) {
                     System.out.println("Max Items needs to be an Integer.");
+                    performanceText.append("Max Items needs to be an Integer.");
                     valid = false;
                 }
             }
             if(outputLocationChoices.getSelectedIndex() == 0) {
                 System.out.println("Please select output location.");
+                performanceText.append("Please select output location.");
                 valid = false;
             }
 
             if(valid) {
+                performanceText.setText("");
                 System.out.println("Executing...");
+                performanceText.append("Executing...");
+                progress = new JProgressBar(0,Integer.parseInt(maxItemsField.getText()));
+                progress.setStringPainted(true);
+                runCommand r = new runCommand();
+                
+                progress.setForeground(FOREGROUNDCOLOR);
+                progress.setBackground(new Color(59,59,59,255));
+                progress.setBorder(BorderFactory.createEmptyBorder());
+                progress.setFocusable(false);
+                progress.setValue(0);
+                customizationPanel.add(progress);
+                progress.setBounds(performanceTextScroller.getX(), 350, 200, 20);
+                progressCounter++;
+            
                 String output = "";
                 output += "ItemGenerator ";
                 if(outputLocationChoices.getSelectedIndex()==2) {
                     System.out.println("Database Selected.");
+                    performanceText.append("\nDatabase Selected.");
+                    progressCounter++;
+                    progress.setValue(progressCounter);
                     output+= "-p \"Database\" ";
                 }
                 else if(response == JFileChooser.APPROVE_OPTION && !selectedLocation.equals("")) {
+                    progressCounter++;
+                    progress.setValue(progressCounter);
                     System.out.println("Local location: " + selectedLocation);
+                    performanceText.append("\nLocal location: " + selectedLocation);
                     output += "-p "+ selectedLocation;
+
                 }
                 if(cycleNumberBox.isSelected() && !cycleNumberField.getText().equals("")) {
+                    progressCounter++;
+                    progress.setValue(progressCounter);
                     System.out.println("Cycle Number: " + cycleNumberField.getText());
+                    performanceText.append(("\nCycle Number: " + cycleNumberBox.getText()));
                     output += " -c "+ cycleNumberField.getText();
                 }
                 else {
                     output += " -c "+ CYCLENUMBERDEFAULT;
                 }
                 if(maxItemsBox.isSelected()&& !maxItemsField.getText().equals("")) {
+                    progressCounter++;
+                    progress.setValue(progressCounter);
                     System.out.println("Max Items: " + maxItemsField.getText());
+                    performanceText.append("\nMax Items: " + maxItemsField.getText());
                     output += " --maxitems "+maxItemsField.getText();
                 }
                 else {
                     output += " --maxitems "+MAXITEMSDEFAULT;
                 }
                 if(aifBox.isSelected()) {
+                    progressCounter++;
+                    progress.setValue(progressCounter);
                     System.out.println("AIF is selected.");
+                    performanceText.append("\nAIF is selected.");
                     output += " --aif";
                 }
-
+                progressCounter++;
+                progress.setValue(progressCounter);
                 System.out.print("CMD Command: " + output + "\n");
-                runCommand run = new runCommand();
+                performanceText.append("\nCMD Command: " + output);
+
                 try {
-                    run.excCommand("cd D:\\ItemGen-main\\ItemGenerator\\bin\\Debug && " + output);
+                    excCommand("cd D:\\ItemGen-main\\ItemGenerator\\bin\\Debug && " + output);
                 } catch (IOException e1) {
                     // TODO Auto-generated catch block
                     e1.printStackTrace();
                 }
+                
             }
         }
         if(e.getSource() == outputLocationChoices) {
@@ -523,6 +623,24 @@ public class UIFramework3 implements ActionListener, MouseListener {
                 selectedLocation = "";
             }
         }
+    }
+    
+    public void excCommand(String command) throws IOException {
+        ProcessBuilder builder = new ProcessBuilder(
+            "cmd.exe", "/c", command);
+            builder.redirectErrorStream(true);
+            Process p = builder.start();
+            BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream()));
+            String line;
+            while (true) {
+                line = r.readLine();
+                if (line == null) { break; }
+                System.out.println(line);
+                performanceText.append("\n" + line);
+                progressCounter++;
+                progress.setValue(progressCounter);
+                
+            }    
     }
     
 
