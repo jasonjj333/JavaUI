@@ -9,10 +9,7 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.GradientPaint;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Rectangle;
-import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -21,14 +18,9 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Stack;
 
 import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
-import javax.swing.DefaultButtonModel;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.GroupLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -40,7 +32,6 @@ import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.LayoutStyle;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.UIManager;
 import javax.swing.plaf.basic.BasicScrollBarUI;
@@ -147,10 +138,8 @@ public class UIFramework3 implements ActionListener, MouseListener {
         int verticalGap = 20;
         //Icon Font Open Sans
         //Create Images/Icons
-        ImageIcon argoIcon = new ImageIcon("./ItemGeneratorTest/Images/RealArgoIcon.png");
-        ImageIcon argoLogo = new ImageIcon("./ItemGeneratorTest/Images/ArgoLogo.png");
+        ImageIcon argoIcon = new ImageIcon("./ItemGeneratorTest/Images/PurpleArgoIcon.png");
         checkIcon = new ImageIcon("./ItemGeneratorTest/Images/CheckIcon.png");
-        logoLabel.setIcon(argoLogo);
 
         //Fonts
         try {
@@ -177,7 +166,6 @@ public class UIFramework3 implements ActionListener, MouseListener {
         itemGeneratorFrame.setLayout(null);
         itemGeneratorFrame.setIconImage(argoIcon.getImage());
         itemGeneratorFrame.setUndecorated(true);
-        //itemGeneratorFrame.setShape(new RoundRectangle2D.Double(10, 10, 100, 100, 50, 50));
         itemGeneratorFrame.setBackground(new Color(1.0f,1.0f,1.0f,0.0f));
         itemGeneratorFrame.setShape(new RoundRectangle2D.Double(0, 0, 1000, 600, 25, 25));
         itemGeneratorFrame.setSize(1000,600);
@@ -188,8 +176,6 @@ public class UIFramework3 implements ActionListener, MouseListener {
         titlePanel.setBounds(0,0,1000,50);
         titlePanel.setLayout(null);
         titlePanel.setBackground(FOREGROUNDCOLOR);
-        //titlePanel.add(logoLabel);
-        //logoLabel.setBounds(30,0, 100, 100);
 
         //makes window able to be dragged
         titlePanel.add(dragPanel);
