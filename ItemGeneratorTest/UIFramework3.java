@@ -39,6 +39,8 @@ import javax.swing.plaf.basic.BasicScrollBarUI;
 import java.awt.geom.RoundRectangle2D;
 import java.awt.FontFormatException;
 import java.awt.GraphicsEnvironment;
+
+
 public class UIFramework3 implements ActionListener, MouseListener {
     static String CYCLENUMBERDEFAULT = "1000";
     static String MAXITEMSDEFAULT = "10";
@@ -75,6 +77,39 @@ public class UIFramework3 implements ActionListener, MouseListener {
     JTextArea performanceText;
     JScrollPane performanceTextScroller;
     JProgressBar progress;
+
+    OvalCheck runBox;
+    OvalCheck randomAmountBox;
+    OvalCheck imageOnlyBox;
+    OvalCheck useTestDataBox;
+    OvalCheck testDataSourceBox;
+    JFileChooser testDataSourceChooser;
+    OvalCheck customerItemCountBox;
+    JTextField customerItemCountField;
+    OvalCheck randomItemCountBox;
+    OvalCheck singleBackgroundImageBox;
+    OvalCheck skipBox;
+    JTextField skipField;
+    OvalCheck checkNumberBox;
+    JTextField checkNumberField;
+    OvalCheck aifDebitsOnlyBox;
+    OvalCheck useImages;
+    JFileChooser useImagesChooser;
+    OvalCheck useDimensionsBox;
+    JTextField useDimensionsField;
+    OvalCheck recompressBox;
+    OvalCheck useOasisCheckNumberBox;
+    OvalCheck randomizeAccountsBox;
+    OvalCheck upsideDownImageBox;
+    OvalCheck noSignatureBox;
+    OvalCheck noImageBox;
+    OvalCheck noImageRecordBox;
+    OvalCheck randomErrorsBox;
+    OvalCheck randomErrorRateBox;
+    JTextField randomErrorRateField;
+
+
+
     int progressCounter;
     ProgressUpdate updateThread = new ProgressUpdate("update1");
     public UIFramework3() {
