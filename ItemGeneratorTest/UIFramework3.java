@@ -4,16 +4,12 @@ package ItemGeneratorTest;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
-import java.awt.GradientPaint;
-import java.awt.Color;
-import java.awt.Font;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.geom.Rectangle2D;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -37,9 +33,17 @@ import javax.swing.UIManager;
 import javax.swing.plaf.basic.BasicScrollBarUI;
 
 import java.awt.geom.RoundRectangle2D;
-import java.awt.FontFormatException;
-import java.awt.GraphicsEnvironment;
+
+
 public class UIFramework3 implements ActionListener, MouseListener {
+    static int VERTICALMARGIN = 15;
+    static int BUTTONWIDTH = 190;
+    static int BUTTONHEIGHT = 36;
+    static int BOXWIDTH = 190;
+    static int BOXHEIGHT = 36;
+    static int FIELDHEIGHT = 36;
+    static int FIELDWIDTH = 60;
+    static int BOXMARGIN = 10;
     static String CYCLENUMBERDEFAULT = "1000";
     static String MAXITEMSDEFAULT = "10";
     static Color BACKGROUNDCOLOR = (Color.decode("#261C2C"));
@@ -75,7 +79,42 @@ public class UIFramework3 implements ActionListener, MouseListener {
     JTextArea performanceText;
     JScrollPane performanceTextScroller;
     JProgressBar progress;
+
+    OvalCheck runBox;
+    JTextField runField;
+    OvalCheck randomAmountBox;
+    OvalCheck imageOnlyBox;
+    OvalCheck useTestDataBox;
+    OvalCheck testDataSourceBox;
+    JFileChooser testDataSourceChooser;
+    OvalCheck customerItemCountBox;
+    JTextField customerItemCountField;
+    OvalCheck randomItemCountBox;
+    OvalCheck singleBackgroundImageBox;
+    OvalCheck skipBox;
+    JTextField skipField;
+    OvalCheck checkNumberBox;
+    JTextField checkNumberField;
+    OvalCheck aifDebitsOnlyBox;
+    OvalCheck useImages;
+    JFileChooser useImagesChooser;
+    OvalCheck useDimensionsBox;
+    JTextField useDimensionsField;
+    OvalCheck recompressBox;
+    OvalCheck useOasisCheckNumberBox;
+    OvalCheck randomizeAccountsBox;
+    OvalCheck upsideDownImageBox;
+    OvalCheck noSignatureBox;
+    OvalCheck noImageBox;
+    OvalCheck noImageRecordBox;
+    OvalCheck randomErrorsBox;
+    OvalCheck randomErrorRateBox;
+    JTextField randomErrorRateField;
+
+
     int progressCounter;
+    ProgressUpdate updateThread = new ProgressUpdate("update1");
+    FeatureCreator creator;
     public UIFramework3() {
 
         //Initialize Global Variables
@@ -133,9 +172,39 @@ public class UIFramework3 implements ActionListener, MouseListener {
         progress = new JProgressBar();
         performanceTextScroller = new JScrollPane(performanceText);
         progressCounter = 0;
+
+        runBox = new OvalCheck(OvalCheck.SHAPE_CAPSULE,OvalCheck.HORIZONTAL, FOREGROUNDCOLOR, FOREGROUNDCOLOR, FOREGROUNDCOLOR, TEXTCOLOR);
+        runField = new JTextField(5);
+        randomAmountBox = new OvalCheck(OvalCheck.SHAPE_CAPSULE,OvalCheck.HORIZONTAL, FOREGROUNDCOLOR, FOREGROUNDCOLOR, FOREGROUNDCOLOR, TEXTCOLOR);
+        imageOnlyBox = new OvalCheck(OvalCheck.SHAPE_CAPSULE,OvalCheck.HORIZONTAL, FOREGROUNDCOLOR, FOREGROUNDCOLOR, FOREGROUNDCOLOR, TEXTCOLOR);
+        useTestDataBox = new OvalCheck(OvalCheck.SHAPE_CAPSULE,OvalCheck.HORIZONTAL, FOREGROUNDCOLOR, FOREGROUNDCOLOR, FOREGROUNDCOLOR, TEXTCOLOR);
+        testDataSourceBox = new OvalCheck(OvalCheck.SHAPE_CAPSULE,OvalCheck.HORIZONTAL, FOREGROUNDCOLOR, FOREGROUNDCOLOR, FOREGROUNDCOLOR, TEXTCOLOR);
+        testDataSourceChooser = new JFileChooser();
+        customerItemCountBox = new OvalCheck(OvalCheck.SHAPE_CAPSULE,OvalCheck.HORIZONTAL, FOREGROUNDCOLOR, FOREGROUNDCOLOR, FOREGROUNDCOLOR, TEXTCOLOR);
+        customerItemCountField = new JTextField(5);
+        randomItemCountBox = new OvalCheck(OvalCheck.SHAPE_CAPSULE,OvalCheck.HORIZONTAL, FOREGROUNDCOLOR, FOREGROUNDCOLOR, FOREGROUNDCOLOR, TEXTCOLOR);
+        singleBackgroundImageBox = new OvalCheck(OvalCheck.SHAPE_CAPSULE,OvalCheck.HORIZONTAL, FOREGROUNDCOLOR, FOREGROUNDCOLOR, FOREGROUNDCOLOR, TEXTCOLOR);
+        skipBox = new OvalCheck(OvalCheck.SHAPE_CAPSULE,OvalCheck.HORIZONTAL, FOREGROUNDCOLOR, FOREGROUNDCOLOR, FOREGROUNDCOLOR, TEXTCOLOR);
+        skipField = new JTextField(5);
+        checkNumberBox = new OvalCheck(OvalCheck.SHAPE_CAPSULE,OvalCheck.HORIZONTAL, FOREGROUNDCOLOR, FOREGROUNDCOLOR, FOREGROUNDCOLOR, TEXTCOLOR);
+        checkNumberField = new JTextField(5);
+        aifDebitsOnlyBox = new OvalCheck(OvalCheck.SHAPE_CAPSULE,OvalCheck.HORIZONTAL, FOREGROUNDCOLOR, FOREGROUNDCOLOR, FOREGROUNDCOLOR, TEXTCOLOR);
+        useImages = new OvalCheck(OvalCheck.SHAPE_CAPSULE,OvalCheck.HORIZONTAL, FOREGROUNDCOLOR, FOREGROUNDCOLOR, FOREGROUNDCOLOR, TEXTCOLOR);
+        useImagesChooser = new JFileChooser();
+        useDimensionsBox = new OvalCheck(OvalCheck.SHAPE_CAPSULE,OvalCheck.HORIZONTAL, FOREGROUNDCOLOR, FOREGROUNDCOLOR, FOREGROUNDCOLOR, TEXTCOLOR);
+        useDimensionsField = new JTextField(5);
+        recompressBox = new OvalCheck(OvalCheck.SHAPE_CAPSULE,OvalCheck.HORIZONTAL, FOREGROUNDCOLOR, FOREGROUNDCOLOR, FOREGROUNDCOLOR, TEXTCOLOR);
+        useOasisCheckNumberBox = new OvalCheck(OvalCheck.SHAPE_CAPSULE,OvalCheck.HORIZONTAL, FOREGROUNDCOLOR, FOREGROUNDCOLOR, FOREGROUNDCOLOR, TEXTCOLOR);
+        randomizeAccountsBox = new OvalCheck(OvalCheck.SHAPE_CAPSULE,OvalCheck.HORIZONTAL, FOREGROUNDCOLOR, FOREGROUNDCOLOR, FOREGROUNDCOLOR, TEXTCOLOR);
+        upsideDownImageBox = new OvalCheck(OvalCheck.SHAPE_CAPSULE,OvalCheck.HORIZONTAL, FOREGROUNDCOLOR, FOREGROUNDCOLOR, FOREGROUNDCOLOR, TEXTCOLOR);
+        noSignatureBox = new OvalCheck(OvalCheck.SHAPE_CAPSULE,OvalCheck.HORIZONTAL, FOREGROUNDCOLOR, FOREGROUNDCOLOR, FOREGROUNDCOLOR, TEXTCOLOR);
+        noImageBox = new OvalCheck(OvalCheck.SHAPE_CAPSULE,OvalCheck.HORIZONTAL, FOREGROUNDCOLOR, FOREGROUNDCOLOR, FOREGROUNDCOLOR, TEXTCOLOR);
+        noImageRecordBox = new OvalCheck(OvalCheck.SHAPE_CAPSULE,OvalCheck.HORIZONTAL, FOREGROUNDCOLOR, FOREGROUNDCOLOR, FOREGROUNDCOLOR, TEXTCOLOR);
+        randomErrorsBox = new OvalCheck(OvalCheck.SHAPE_CAPSULE,OvalCheck.HORIZONTAL, FOREGROUNDCOLOR, FOREGROUNDCOLOR, FOREGROUNDCOLOR, TEXTCOLOR);
+        randomErrorRateBox = new OvalCheck(OvalCheck.SHAPE_CAPSULE,OvalCheck.HORIZONTAL, FOREGROUNDCOLOR, FOREGROUNDCOLOR, FOREGROUNDCOLOR, TEXTCOLOR);
+        randomErrorRateField = new JTextField(5);
+
         //Local Variables
-        int componentHeight = 0;
-        int verticalGap = 20;
         //Icon Font Open Sans
         //Create Images/Icons
         ImageIcon argoIcon = new ImageIcon("./ItemGeneratorTest/Images/PurpleArgoIcon.png");
@@ -158,10 +227,11 @@ public class UIFramework3 implements ActionListener, MouseListener {
         }
         openDirectory.updateUI();
         openDirectory.setOpaque(false);
+
+        //Feature Creator
+        creator = new FeatureCreator(TEXTCOLOR, FOREGROUNDCOLOR, BACKGROUNDCOLOR, DARKTEXTCOLOR, openSans16);
         
         //Item Generator Frame
-        //Set size should be 1000 x 600 but due to only small subset of features
-        //added so far, dimensions are reduced
         itemGeneratorFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         itemGeneratorFrame.setLayout(null);
         itemGeneratorFrame.setIconImage(argoIcon.getImage());
@@ -188,13 +258,7 @@ public class UIFramework3 implements ActionListener, MouseListener {
         //Close Button
         titlePanel.add(closeButton);
         closeButton.setBounds(titlePanel.getWidth()-50, 0, 50,30);
-        closeButton.setText("X");
-        closeButton.setFont(openSans16);
-        closeButton.setForeground(TEXTCOLOR);
-        closeButton.setOpaque(false);
-        closeButton.setContentAreaFilled(false);
-        closeButton.setBorderPainted(false);
-        closeButton.setFocusable(false);
+        creator.fillButton(closeButton, "X");
         closeButton.addActionListener(this);
 
         //Minimize Button
@@ -214,18 +278,23 @@ public class UIFramework3 implements ActionListener, MouseListener {
         customizationPanel.setBackground(BACKGROUNDCOLOR);
         customizationPanel.setLayout(null);
 
+        //Layout Manager for Customization Panel
+        LayoutManager layout = new LayoutManager(customizationPanel.getWidth(), customizationPanel.getHeight(), 10, VERTICALMARGIN);
+        layout.setX(10);
+        layout.setY(20);
+
         //Output Location
         customizationPanel.add(outputLocationLabel);
         customizationPanel.add(outputLocationChoices);
         customizationPanel.add(localLabel);
-        outputLocationLabel.setBounds(10, componentHeight+verticalGap, 220, 20);
+        layout.updateComponent(220, 20);
+        outputLocationLabel.setBounds(layout.getX(), layout.getY(), 220, 20);
         outputLocationLabel.setText("Select Output Location");
         outputLocationLabel.setFont(openSans16);
         outputLocationLabel.setForeground(TEXTCOLOR);
-        //outputLocationLabel.setIcon(selectLocationIcon);
-        componentHeight += outputLocationLabel.getHeight()+verticalGap;
 
-        outputLocationChoices.setBounds(20,componentHeight+verticalGap,100,36);
+        layout.updateComponent(100, 36,15);
+        outputLocationChoices.setBounds(layout.getX(),layout.getY(),100,36);
         outputLocationChoices.setBackground(new Color(59,59,59,255));
         outputLocationChoices.setForeground(TEXTCOLOR);
         outputLocationChoices.setFont(openSans16);
@@ -234,150 +303,226 @@ public class UIFramework3 implements ActionListener, MouseListener {
         outputLocationChoices.addActionListener(this);
         outputLocationChoices.setFocusable(false);
 
-        localLabel.setBounds((int)outputLocationChoices.getLocation().getX()+outputLocationChoices.getWidth()+10, componentHeight+verticalGap, 100, 36);
+        layout.updateHComponent(100, 36);
+        localLabel.setBounds(layout.getTextX(), layout.getY(), 150, 36);
         localLabel.setFont(openSans16);
         localLabel.setForeground(TEXTCOLOR);
         localLabel.setText("");
 
-        componentHeight += outputLocationChoices.getHeight()+verticalGap;
+        //Skip
+        customizationPanel.add(skipBox);
+        layout.updateComponent(BOXWIDTH,BOXHEIGHT,BOXMARGIN);
+        skipBox.setBounds(layout.getX(),layout.getY(), BOXWIDTH, BOXHEIGHT);
+        creator.fillCheckBox(skipBox,"Skip");
+        skipBox.addActionListener(this);
+
+        customizationPanel.add(skipField);
+        layout.updateHComponent(FIELDWIDTH,FIELDHEIGHT);
+        skipField.setBounds(layout.getTextX(),layout.getY(),FIELDWIDTH,FIELDHEIGHT);
+        creator.fillField(skipField, "001");
+        skipField.addMouseListener(this);
 
         //Cycle Number
         customizationPanel.add(cycleNumberBox);
-        customizationPanel.add(cycleNumberField);
-        cycleNumberBox.setBounds(15,componentHeight+verticalGap,190,36);
-        cycleNumberBox.setText("Cycle Number");
-        cycleNumberBox.setForeground(TEXTCOLOR);
-        cycleNumberBox.setFont(openSans16);
-        cycleNumberBox.setRadius(.16);
-        cycleNumberBox.setBorderThickness(0);
-        cycleNumberBox.setHorizontalAlignment(JCheckBox.CENTER);
-
-        //cycleNumberBox.setOpaque(false);
-        //cycleNumberBox.setIcon(cycleNumberNotSelectedIcon);
-        //cycleNumberBox.setSelectedIcon(cycleNumberSelectedIcon);
+        layout.updateComponent(BOXWIDTH, BOXHEIGHT,BOXMARGIN);
+        cycleNumberBox.setBounds(layout.getX(),layout.getY(),BOXWIDTH,BOXHEIGHT);
+        creator.fillCheckBox(cycleNumberBox, "Cycle Number");
         cycleNumberBox.addActionListener(this);
 
-        cycleNumberField.setBounds(220,componentHeight+verticalGap,60,36);
-        cycleNumberField.setBackground(new Color(59,59,59,255));
-        cycleNumberField.setCaretColor(FOREGROUNDCOLOR);
-        cycleNumberField.setForeground(DARKTEXTCOLOR);
-        cycleNumberField.setText(CYCLENUMBERDEFAULT);
-        cycleNumberField.setEditable(false);
-        cycleNumberField.setFont(openSans16);
-        cycleNumberField.setBorder(BorderFactory.createEmptyBorder());
+        customizationPanel.add(cycleNumberField);
+        layout.updateHComponent(60,FIELDHEIGHT);
+        cycleNumberField.setBounds(layout.getTextX(),layout.getY(),FIELDWIDTH,FIELDHEIGHT);
+        creator.fillField(cycleNumberField,"010");
         cycleNumberField.addMouseListener(this);
-        cycleNumberField.setHorizontalAlignment(JCheckBox.RIGHT);
-        //textIconLabel.setBounds(cycleNumberField.getX() + cycleNumberField.getWidth(), cycleNumberField.getY(), 36,36);
-        //textIconLabel.setIcon(textFieldDisabledIcon);
-        //textIconLabel.setBackground(Color.WHITE);
 
-        componentHeight += cycleNumberBox.getHeight()+verticalGap;
+        //Run Box and Field
+        customizationPanel.add(runBox);
+        layout.updateComponent(BOXWIDTH, BOXHEIGHT,BOXMARGIN);
+        runBox.setBounds(layout.getX(),layout.getY(),BOXWIDTH,BOXHEIGHT);
+        creator.fillCheckBox(runBox, "Run");
+        runBox.addActionListener(this);
 
-        
+        customizationPanel.add(runField);
+        layout.updateHComponent(60,FIELDHEIGHT);
+        runField.setBounds(layout.getTextX(),layout.getY(),FIELDWIDTH,FIELDHEIGHT);
+        creator.fillField(runField,"001");
+        runField.addMouseListener(this);
+
         //Max Items
         customizationPanel.add(maxItemsBox);
-        customizationPanel.add(maxItemsField);
-
-        maxItemsBox.setBounds(15,componentHeight + verticalGap, 190, 36);
-        maxItemsBox.setText("Max Items");
-        maxItemsBox.setFont(openSans16);
-        maxItemsBox.setForeground(TEXTCOLOR);
-        maxItemsBox.setRadius(.16);
-        maxItemsBox.setBorderThickness(0);
-        maxItemsBox.setHorizontalAlignment(JCheckBox.CENTER);
+        layout.updateComponent(BOXWIDTH,BOXHEIGHT,BOXMARGIN);
+        maxItemsBox.setBounds(layout.getX(),layout.getY(), BOXWIDTH, BOXHEIGHT);
+        creator.fillCheckBox(maxItemsBox,"Max Items");
         maxItemsBox.addActionListener(this);
-        
 
-        maxItemsField.setBounds(220,componentHeight+verticalGap,60,36);
-        maxItemsField.setFont(openSans16);
-        maxItemsField.setText("20");
-        maxItemsField.setBackground(new Color(59,59,59,255));
-        maxItemsField.setCaretColor(FOREGROUNDCOLOR);
-        maxItemsField.setForeground(DARKTEXTCOLOR);
-        maxItemsField.setEditable(false);
-        maxItemsField.setBorder(BorderFactory.createEmptyBorder());
-        maxItemsField.setHorizontalAlignment(JCheckBox.RIGHT);
+        customizationPanel.add(maxItemsField);
+        layout.updateHComponent(FIELDWIDTH,FIELDHEIGHT);
+        maxItemsField.setBounds(layout.getTextX(),layout.getY(),FIELDWIDTH,FIELDHEIGHT);
+        creator.fillField(maxItemsField, "20");
         maxItemsField.addMouseListener(this);
 
-        componentHeight += maxItemsBox.getHeight()+verticalGap;
+        //Check Number
+        customizationPanel.add(checkNumberBox);
+        layout.updateComponent(BOXWIDTH,BOXHEIGHT,BOXMARGIN);
+        checkNumberBox.setBounds(layout.getX(),layout.getY(), BOXWIDTH, BOXHEIGHT);
+        creator.fillCheckBox(checkNumberBox,"Check Number");
+        checkNumberBox.addActionListener(this);
 
-        //AIF Debits Only Check Box
-        //Dimensions of icon 177x36 px
+        customizationPanel.add(checkNumberField);
+        layout.updateHComponent(FIELDWIDTH,FIELDHEIGHT);
+        checkNumberField.setBounds(layout.getTextX(),layout.getY(),FIELDWIDTH,FIELDHEIGHT);
+        creator.fillField(checkNumberField, "001");
+        checkNumberField.addMouseListener(this);
+
+        //Use Dimensions
+        customizationPanel.add(useDimensionsBox);
+        layout.updateComponent(BOXWIDTH,BOXHEIGHT,BOXMARGIN);
+        useDimensionsBox.setBounds(layout.getX(),layout.getY(), BOXWIDTH, BOXHEIGHT);
+        creator.fillCheckBox(useDimensionsBox,"Use Dimensions");
+        useDimensionsBox.addActionListener(this);
+
+        customizationPanel.add(useDimensionsField);
+        layout.updateHComponent(FIELDWIDTH,FIELDHEIGHT);
+        useDimensionsField.setBounds(layout.getTextX(),layout.getY(),FIELDWIDTH,FIELDHEIGHT);
+        creator.fillField(useDimensionsField, "100x10");
+        useDimensionsField.addMouseListener(this);
+
+        //Test Data Source
+        //..add later
+
+        //Customer Item Count
+        customizationPanel.add(customerItemCountBox);
+        layout.updateComponent(BOXWIDTH,BOXHEIGHT,BOXMARGIN);
+        customerItemCountBox.setBounds(layout.getX(),layout.getY(), BOXWIDTH, BOXHEIGHT);
+        creator.fillCheckBox(customerItemCountBox,"Customer Item Count");
+        customerItemCountBox.addActionListener(this);
+
+        customizationPanel.add(customerItemCountField);
+        layout.updateHComponent(FIELDWIDTH,FIELDHEIGHT);
+        customerItemCountField.setBounds(layout.getTextX(),layout.getY(),FIELDWIDTH,FIELDHEIGHT);
+        creator.fillField(customerItemCountField, "");
+        customerItemCountField.addMouseListener(this);
+
+        //Random Item Count
+        customizationPanel.add(randomItemCountBox);
+        layout.updateComponent(BOXWIDTH,BOXHEIGHT,BOXMARGIN);
+        randomItemCountBox.setBounds(layout.getX(),layout.getY(), BOXWIDTH, BOXHEIGHT);
+        creator.fillCheckBox(randomItemCountBox,"Random Item Count");
+        randomItemCountBox.addActionListener(this);
+
+        //Single Background Image
+        customizationPanel.add(singleBackgroundImageBox);
+        layout.updateComponent(BOXWIDTH,BOXHEIGHT,BOXMARGIN);
+        singleBackgroundImageBox.setBounds(layout.getX(),layout.getY(), BOXWIDTH, BOXHEIGHT);
+        creator.fillCheckBox(singleBackgroundImageBox,"Single Background Image");
+        singleBackgroundImageBox.addActionListener(this);
+
+        //Random Amount Check Box
+        customizationPanel.add(randomAmountBox);
+        layout.updateComponent(BOXWIDTH, BOXHEIGHT,BOXMARGIN);
+        randomAmountBox.setBounds(layout.getX(),layout.getY(),BOXWIDTH,BOXHEIGHT);
+        creator.fillCheckBox(randomAmountBox, "Random Amount");
+        randomAmountBox.addActionListener(this);
+
+        //Image Only Box
+        customizationPanel.add(imageOnlyBox);
+        layout.updateComponent(BOXWIDTH, BOXHEIGHT, BOXMARGIN);
+        imageOnlyBox.setBounds(layout.getX(),layout.getY(), BOXWIDTH, BOXHEIGHT);
+        creator.fillCheckBox(imageOnlyBox, "Image Only");
+        imageOnlyBox.addActionListener(this);
+
+        //AIF
         customizationPanel.add(aifBox);
-        aifBox.setBounds(15,componentHeight + verticalGap, 190, 36);
-        aifBox.setOpaque(false);
-        aifBox.setText("AIF");
-        aifBox.setIcon(checkIcon);
-        aifBox.setFont(openSans16);
-        aifBox.setHorizontalAlignment(JCheckBox.CENTER);
-        aifBox.setForeground(TEXTCOLOR);
-        aifBox.setRadius(.16);
-        aifBox.setBorderThickness(0);
+        layout.updateComponent(BOXWIDTH, BOXHEIGHT, BOXMARGIN);
+        aifBox.setBounds(layout.getX(),layout.getY(), BOXWIDTH, BOXHEIGHT);
+        creator.fillCheckBox(aifBox, "AIF");
         aifBox.addActionListener(this);
 
-        componentHeight += aifBox.getHeight()+verticalGap;
+        //AIF Debits Only
+        customizationPanel.add(aifDebitsOnlyBox);
+        layout.updateComponent(BOXWIDTH, BOXHEIGHT, BOXMARGIN);
+        aifDebitsOnlyBox.setBounds(layout.getX(),layout.getY(), BOXWIDTH, BOXHEIGHT);
+        creator.fillCheckBox(aifDebitsOnlyBox, "AIF Debits Only");
+        aifDebitsOnlyBox.addActionListener(this);
 
-        //performance text area
-        performanceText.setEditable(false);
-        performanceText.setFocusable(false);
-        performanceTextScroller.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-        performanceTextScroller.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        performanceTextScroller.setBorder(BorderFactory.createEmptyBorder());
-        performanceTextScroller.getVerticalScrollBar().setBackground(BACKGROUNDCOLOR);
-        performanceTextScroller.setFocusable(false);
-        performanceTextScroller.getVerticalScrollBar().setUI(new BasicScrollBarUI() {
-            @Override
-            protected void configureScrollBarColors() {
-                this.thumbColor = FOREGROUNDCOLOR;
-            }
+        //Use Images
+        //..do later
 
-            @Override
-            protected void installComponents(){
-                switch (scrollbar.getOrientation()) {
-                case JScrollBar.VERTICAL:
-                    incrButton = createIncreaseButton(SOUTH);
-                    decrButton = createDecreaseButton(NORTH);
-                    break;
-            
-                case JScrollBar.HORIZONTAL:
-                    if (scrollbar.getComponentOrientation().isLeftToRight()) {    
-                        incrButton = createIncreaseButton(EAST);
-                        decrButton = createDecreaseButton(WEST);
-                    } else {
-                        incrButton = createIncreaseButton(WEST);
-                        decrButton = createDecreaseButton(EAST);
-                    }
-                    break;
-                }
-                //scrollbar.add(incrButton); // Comment out this line to hide arrow
-                //scrollbar.add(decrButton); // Comment out this line to hide arrow
-                // Force the children's enabled state to be updated.
-            scrollbar.setEnabled(scrollbar.isEnabled());
-            }
-        });
-        customizationPanel.add(performanceTextScroller);
-        performanceTextScroller.setBounds(380, 25, 600, 300);maxItemsField.setFont(openSans16);
-        performanceText.setText("Performance Output:");
-        performanceText.setBackground(new Color(59,59,59,255));
-        performanceText.setCaretColor(FOREGROUNDCOLOR);
-        performanceText.setForeground(DARKTEXTCOLOR);
-        performanceText.setBorder(BorderFactory.createEmptyBorder());
+
+        //Use Test Data
+        customizationPanel.add(useTestDataBox);
+        layout.updateComponent(BOXWIDTH, BOXHEIGHT, BOXMARGIN);
+        useTestDataBox.setBounds(layout.getX(),layout.getY(), BOXWIDTH, BOXHEIGHT);
+        creator.fillCheckBox(useTestDataBox, "Use Test Data");
+        useTestDataBox.addActionListener(this);
+
+        //Recompress
+        customizationPanel.add(recompressBox);
+        layout.updateComponent(BOXWIDTH, BOXHEIGHT, BOXMARGIN);
+        recompressBox.setBounds(layout.getX(),layout.getY(), BOXWIDTH, BOXHEIGHT);
+        creator.fillCheckBox(recompressBox, "Recompress");
+        recompressBox.addActionListener(this);
+
+        //Use Oasis Check Number
+        customizationPanel.add(useOasisCheckNumberBox);
+        layout.updateComponent(BOXWIDTH, BOXHEIGHT, BOXMARGIN);
+        useOasisCheckNumberBox.setBounds(layout.getX(),layout.getY(), BOXWIDTH, BOXHEIGHT);
+        creator.fillCheckBox(useOasisCheckNumberBox, "Use Oasis Check Number");
+        useOasisCheckNumberBox.addActionListener(this);
+
+        //Randomize Accounts
+        customizationPanel.add(randomizeAccountsBox);
+        layout.updateComponent(BOXWIDTH, BOXHEIGHT, BOXMARGIN);
+        randomizeAccountsBox.setBounds(layout.getX(),layout.getY(), BOXWIDTH, BOXHEIGHT);
+        creator.fillCheckBox(randomizeAccountsBox, "Randomize Accounts");
+        randomizeAccountsBox.addActionListener(this);
+
+        //Upside Down Image
+        customizationPanel.add(upsideDownImageBox);
+        layout.updateComponent(BOXWIDTH, BOXHEIGHT, BOXMARGIN);
+        upsideDownImageBox.setBounds(layout.getX(),layout.getY(), BOXWIDTH, BOXHEIGHT);
+        creator.fillCheckBox(upsideDownImageBox, "Upside Down Image");
+        upsideDownImageBox.addActionListener(this);
+
+        //No Signature
+        customizationPanel.add(noSignatureBox);
+        layout.updateComponent(BOXWIDTH, BOXHEIGHT, BOXMARGIN);
+        noSignatureBox.setBounds(layout.getX(),layout.getY(), BOXWIDTH, BOXHEIGHT);
+        creator.fillCheckBox(noSignatureBox, "No Signature");
+        noSignatureBox.addActionListener(this);
+
+        //No Image
+        customizationPanel.add(noImageBox);
+        layout.updateComponent(BOXWIDTH, BOXHEIGHT, BOXMARGIN);
+        noImageBox.setBounds(layout.getX(),layout.getY(), BOXWIDTH, BOXHEIGHT);
+        creator.fillCheckBox(noImageBox, "No Image");
+        noImageBox.addActionListener(this);
+
+        //No Image Record
+        customizationPanel.add(noImageRecordBox);
+        layout.updateComponent(BOXWIDTH, BOXHEIGHT, BOXMARGIN);
+        noImageRecordBox.setBounds(layout.getX(),layout.getY(), BOXWIDTH, BOXHEIGHT);
+        creator.fillCheckBox(noImageRecordBox, "No Image Record");
+        noImageRecordBox.addActionListener(this);
+
+        //Random Errors
+        customizationPanel.add(randomErrorsBox);
+        layout.updateComponent(BOXWIDTH, BOXHEIGHT, BOXMARGIN);
+        randomErrorsBox.setBounds(layout.getX(),layout.getY(), BOXWIDTH, BOXHEIGHT);
+        creator.fillCheckBox(randomErrorsBox, "Random Errors");
+        randomErrorsBox.addActionListener(this);
 
         //Execute Button
         customizationPanel.add(executeButton);
+        layout.updateComponent(BUTTONWIDTH,BUTTONHEIGHT,BOXMARGIN);
+        executeButton.setBounds(layout.getX(), layout.getY(), BUTTONWIDTH, BUTTONHEIGHT);
+        creator.fillButton(executeButton, "Execute");
 
-        executeButton.setBounds(16, componentHeight + verticalGap, 190, 36);
-        executeButton.setText("Execute");
-        executeButton.setFont(openSans16);
-        executeButton.setForeground(TEXTCOLOR);
-        executeButton.setBorderThickness(0);
-        executeButton.setRadius(.16);
-        executeButton.setBorder(BorderFactory.createEmptyBorder());
-        executeButton.addActionListener(this);
-        executeButton.setFocusable(false);
-
-        componentHeight += executeButton.getHeight()+verticalGap;
-
+        //Performance text area
+        //customizationPanel.add(performanceTextScroller);
+        //layout.updateComponent(600,300);
+        // performanceTextScroller.setBounds(380, 25, 600, 300);
+        //creator.fillPerformanceText(performanceText,performanceTextScroller, "Performance Output: ");
 
 
         itemGeneratorFrame.setVisible(true);
@@ -405,31 +550,27 @@ public class UIFramework3 implements ActionListener, MouseListener {
 
     @Override
     public void mousePressed(MouseEvent e) {
-        // TODO Auto-generated method stub
-        
+
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        // TODO Auto-generated method stub
-        
+
     }
 
     @Override
     public void mouseEntered(MouseEvent e) {
-        // TODO Auto-generated method stub
-        
+
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
-        // TODO Auto-generated method stub
-        
+
     }
 
-    @Override
+
     public void actionPerformed(ActionEvent e) {
-        
+
         if(e.getSource() == closeButton) {
             itemGeneratorFrame.setVisible(false); //you can't see me!
             itemGeneratorFrame.dispose(); //Destroy the JFrame object
@@ -438,44 +579,32 @@ public class UIFramework3 implements ActionListener, MouseListener {
             if(cycleNumberBox.isSelected()) {
                 cycleNumberField.setForeground(TEXTCOLOR);
                 cycleNumberField.setEditable(true);
-                cycleNumberBox.setColorNormal(TEXTCOLOR);
-                cycleNumberBox.setForeground(FOREGROUNDCOLOR);
-                cycleNumberBox.setColorHighlighted(TEXTCOLOR);
+                creator.boxSelected(cycleNumberBox);
             }
             else {
                 cycleNumberField.setForeground(DARKTEXTCOLOR);
                 cycleNumberField.setEditable(false);
-                cycleNumberBox.setColorNormal(FOREGROUNDCOLOR);
-                cycleNumberBox.setForeground(TEXTCOLOR);
-                cycleNumberBox.setColorHighlighted(FOREGROUNDCOLOR);
+                creator.boxNotSelected(cycleNumberBox);
             }
         }
         if(e.getSource() == maxItemsBox) {
             if(maxItemsBox.isSelected()) {
                 maxItemsField.setForeground(TEXTCOLOR);
                 maxItemsField.setEditable(true);
-                maxItemsBox.setColorNormal(TEXTCOLOR);
-                maxItemsBox.setForeground(FOREGROUNDCOLOR);
-                maxItemsBox.setColorHighlighted(TEXTCOLOR);
+                creator.boxSelected(maxItemsBox);
             }
             else {
                 maxItemsField.setForeground(DARKTEXTCOLOR);
                 maxItemsField.setEditable(false);
-                maxItemsBox.setColorNormal(FOREGROUNDCOLOR);
-                maxItemsBox.setForeground(TEXTCOLOR);
-                maxItemsBox.setColorHighlighted(FOREGROUNDCOLOR);
+                creator.boxNotSelected(maxItemsBox);
             }
         }
         if(e.getSource() == aifBox) {
             if(aifBox.isSelected()) {
-                aifBox.setColorNormal(TEXTCOLOR);
-                aifBox.setForeground(FOREGROUNDCOLOR);
-                aifBox.setColorHighlighted(TEXTCOLOR);
+                creator.boxSelected(aifBox);
             }
             else {
-                aifBox.setColorNormal(FOREGROUNDCOLOR);
-                aifBox.setForeground(TEXTCOLOR);
-                aifBox.setColorHighlighted(FOREGROUNDCOLOR);
+                creator.boxNotSelected(aifBox);
             }
         }
         if(e.getSource() == executeButton) {
@@ -517,8 +646,6 @@ public class UIFramework3 implements ActionListener, MouseListener {
                 performanceText.append("Executing...");
                 progress = new JProgressBar(0,Integer.parseInt(maxItemsField.getText()));
                 progress.setStringPainted(true);
-                runCommand r = new runCommand();
-                
                 progress.setForeground(FOREGROUNDCOLOR);
                 progress.setBackground(new Color(59,59,59,255));
                 progress.setBorder(BorderFactory.createEmptyBorder());
@@ -526,63 +653,12 @@ public class UIFramework3 implements ActionListener, MouseListener {
                 progress.setValue(0);
                 customizationPanel.add(progress);
                 progress.setBounds(performanceTextScroller.getX(), 350, 200, 20);
-                progressCounter++;
-            
-                String output = "";
-                output += "ItemGenerator ";
-                if(outputLocationChoices.getSelectedIndex()==2) {
-                    System.out.println("Database Selected.");
-                    performanceText.append("\nDatabase Selected.");
-                    progressCounter++;
-                    progress.setValue(progressCounter);
-                    output+= "-p \"Database\" ";
-                }
-                else if(response == JFileChooser.APPROVE_OPTION && !selectedLocation.equals("")) {
-                    progressCounter++;
-                    progress.setValue(progressCounter);
-                    System.out.println("Local location: " + selectedLocation);
-                    performanceText.append("\nLocal location: " + selectedLocation);
-                    output += "-p "+ selectedLocation;
+                
+                ProgressUpdate updateThread = new ProgressUpdate("update1");
+                updateThread.start();
+                ExecuteUpdate executeThread = new ExecuteUpdate("execute1");
+                executeThread.start();
 
-                }
-                if(cycleNumberBox.isSelected() && !cycleNumberField.getText().equals("")) {
-                    progressCounter++;
-                    progress.setValue(progressCounter);
-                    System.out.println("Cycle Number: " + cycleNumberField.getText());
-                    performanceText.append(("\nCycle Number: " + cycleNumberBox.getText()));
-                    output += " -c "+ cycleNumberField.getText();
-                }
-                else {
-                    output += " -c "+ CYCLENUMBERDEFAULT;
-                }
-                if(maxItemsBox.isSelected()&& !maxItemsField.getText().equals("")) {
-                    progressCounter++;
-                    progress.setValue(progressCounter);
-                    System.out.println("Max Items: " + maxItemsField.getText());
-                    performanceText.append("\nMax Items: " + maxItemsField.getText());
-                    output += " --maxitems "+maxItemsField.getText();
-                }
-                else {
-                    output += " --maxitems "+MAXITEMSDEFAULT;
-                }
-                if(aifBox.isSelected()) {
-                    progressCounter++;
-                    progress.setValue(progressCounter);
-                    System.out.println("AIF is selected.");
-                    performanceText.append("\nAIF is selected.");
-                    output += " --aif";
-                }
-                progressCounter++;
-                progress.setValue(progressCounter);
-                System.out.print("CMD Command: " + output + "\n");
-                performanceText.append("\nCMD Command: " + output);
-
-                try {
-                    excCommand("cd D:\\ItemGen-main\\ItemGenerator\\bin\\Debug && " + output);
-                } catch (IOException e1) {
-                    // TODO Auto-generated catch block
-                    e1.printStackTrace();
-                }
                 
             }
         }
@@ -628,7 +704,108 @@ public class UIFramework3 implements ActionListener, MouseListener {
                 
             }    
     }
+
+    class ProgressUpdate implements Runnable {
+        Thread updateProgress;
+        private String updateProgressName;
+        static volatile boolean exit = false;
+        ProgressUpdate(String name) {
+         updateProgressName = name;
+        }
+
+        @Override
+        public void run() {
+            System.out.println("Thread running" + updateProgressName);
+            while(!exit){
+                progress.setValue(progressCounter);
+                progress.repaint();
+            }
+            System.out.println("Progress Thread closed.");
+        }
+        public void start() {
+            System.out.println("Thread started");
+            if (updateProgress == null) {
+                updateProgress = new Thread(this, updateProgressName);
+                updateProgress.start();
+            }
+        }
+        public void stop() {
+            exit = true;
+        }
+       }
     
+       class ExecuteUpdate implements Runnable {
+        Thread updateExecute;
+        private String updateExecuteName;
+        static volatile boolean exit = false;
+        ExecuteUpdate(String name) {
+         updateExecuteName = name;
+        }
+        @Override
+        public void run() {
+         System.out.println("Thread running" + updateExecuteName);
+            String output = "";
+            output += "ItemGenerator ";
+            if(outputLocationChoices.getSelectedIndex()==2) {
+                System.out.println("Database Selected.");
+                performanceText.append("\nDatabase Selected.");
+                output+= "-p \"Database\" ";
+            }
+            else if(response == JFileChooser.APPROVE_OPTION && !selectedLocation.equals("")) {
+                System.out.println("Local location: " + selectedLocation);
+                performanceText.append("\nLocal location: " + selectedLocation);
+                output += "-p "+ selectedLocation;
+   
+            }
+            if(cycleNumberBox.isSelected() && !cycleNumberField.getText().equals("")) {
+                System.out.println("Cycle Number: " + cycleNumberField.getText());
+                performanceText.append(("\nCycle Number: " + cycleNumberBox.getText()));
+                output += " -c "+ cycleNumberField.getText();
+            }
+            else {
+                output += " -c "+ CYCLENUMBERDEFAULT;
+            }
+            if(maxItemsBox.isSelected()&& !maxItemsField.getText().equals("")) {
+                System.out.println("Max Items: " + maxItemsField.getText());
+                performanceText.append("\nMax Items: " + maxItemsField.getText());
+                output += " --maxitems "+maxItemsField.getText();
+            }
+            else {
+                output += " --maxitems "+MAXITEMSDEFAULT;
+            }
+            if(aifBox.isSelected()) {
+                System.out.println("AIF is selected.");
+                performanceText.append("\nAIF is selected.");
+                output += " --aif";
+            }
+            System.out.print("CMD Command: " + output + "\n");
+            performanceText.append("\nCMD Command: " + output);
+   
+            try {
+                excCommand("cd D:\\ItemGen-main\\ItemGenerator\\bin\\Debug && " + output);
+            } catch (IOException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            }
+                exit = true;
+                updateThread.stop();
+                System.out.println("Execute Thread closed.");
+            
+            
+         
+        }
+        public void start() {
+         System.out.println("Thread started");
+         if (updateExecute == null) {
+          updateExecute = new Thread(this, updateExecuteName);
+          updateExecute.start();
+         }
+        }
+
+        public void stop() {
+            exit = true;
+        }
+       }
 
     
 }
