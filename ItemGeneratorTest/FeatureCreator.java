@@ -13,6 +13,7 @@ public class FeatureCreator {
     public FeatureCreator(Color tcolor, Color fcolor, Color bcolor, Color dtcolor, Font font) {
         TEXTCOLOR = tcolor;
         FOREGROUNDCOLOR = fcolor;
+        BACKGROUNDCOLOR = bcolor;
         DARKTEXTCOLOR = dtcolor;
         openSans16 = font;
     }
@@ -51,16 +52,6 @@ public class FeatureCreator {
         button.setContentAreaFilled(false);
         button.setBorderPainted(false);
         button.setFocusable(false);
-    }
-    public void boxSelected(OvalCheck box) {
-        box.setColorNormal(TEXTCOLOR);
-        box.setForeground(FOREGROUNDCOLOR);
-        box.setColorHighlighted(TEXTCOLOR);
-    }
-    public void boxNotSelected(OvalCheck box) {
-        box.setColorNormal(FOREGROUNDCOLOR);
-        box.setForeground(TEXTCOLOR);
-        box.setColorHighlighted(FOREGROUNDCOLOR);
     }
     public void fillPerformanceText(JTextArea performanceText, JScrollPane performanceTextScroller, String label) {
         performanceText.setEditable(false);

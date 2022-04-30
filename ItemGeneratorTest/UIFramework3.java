@@ -1,38 +1,17 @@
 package ItemGeneratorTest;
 
 
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.geom.Rectangle2D;
+import java.awt.geom.RoundRectangle2D;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
-
-import javax.swing.BorderFactory;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JFileChooser;
-import javax.swing.JPanel;
-import javax.swing.JProgressBar;
-import javax.swing.JScrollBar;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.ScrollPaneConstants;
-import javax.swing.UIManager;
-import javax.swing.plaf.basic.BasicScrollBarUI;
-
-import java.awt.geom.RoundRectangle2D;
 
 
 public class UIFramework3 implements ActionListener, MouseListener {
@@ -115,6 +94,7 @@ public class UIFramework3 implements ActionListener, MouseListener {
     int progressCounter;
     ProgressUpdate updateThread = new ProgressUpdate("update1");
     FeatureCreator creator;
+    EventManager eventManager;
     public UIFramework3() {
 
         //Initialize Global Variables
@@ -230,6 +210,8 @@ public class UIFramework3 implements ActionListener, MouseListener {
 
         //Feature Creator
         creator = new FeatureCreator(TEXTCOLOR, FOREGROUNDCOLOR, BACKGROUNDCOLOR, DARKTEXTCOLOR, openSans16);
+        //Event Manager
+        eventManager = new EventManager(TEXTCOLOR, FOREGROUNDCOLOR, BACKGROUNDCOLOR, DARKTEXTCOLOR, openSans16);
         
         //Item Generator Frame
         itemGeneratorFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -270,7 +252,6 @@ public class UIFramework3 implements ActionListener, MouseListener {
         minimizeButton.setOpaque(false);
         minimizeButton.setFocusable(false);
         minimizeButton.addMouseListener(this);
-
 
         //Customization Panel
         itemGeneratorFrame.add(customizationPanel);
@@ -572,50 +553,83 @@ public class UIFramework3 implements ActionListener, MouseListener {
     public void actionPerformed(ActionEvent e) {
 
         if(e.getSource() == closeButton) {
-            itemGeneratorFrame.setVisible(false); //you can't see me!
+            itemGeneratorFrame.setVisible(false);
             itemGeneratorFrame.dispose(); //Destroy the JFrame object
         }
+        if(e.getSource() == skipBox) {
+            eventManager.updateBoxField(skipBox, skipField);
+        }
         if(e.getSource() == cycleNumberBox) {
-            if(cycleNumberBox.isSelected()) {
-                cycleNumberField.setForeground(TEXTCOLOR);
-                cycleNumberField.setEditable(true);
-                creator.boxSelected(cycleNumberBox);
-            }
-            else {
-                cycleNumberField.setForeground(DARKTEXTCOLOR);
-                cycleNumberField.setEditable(false);
-                creator.boxNotSelected(cycleNumberBox);
-            }
+            eventManager.updateBoxField(cycleNumberBox, cycleNumberField);
+        }
+        if(e.getSource() == runBox) {
+            eventManager.updateBoxField(runBox, runField);
         }
         if(e.getSource() == maxItemsBox) {
-            if(maxItemsBox.isSelected()) {
-                maxItemsField.setForeground(TEXTCOLOR);
-                maxItemsField.setEditable(true);
-                creator.boxSelected(maxItemsBox);
-            }
-            else {
-                maxItemsField.setForeground(DARKTEXTCOLOR);
-                maxItemsField.setEditable(false);
-                creator.boxNotSelected(maxItemsBox);
-            }
+            eventManager.updateBoxField(maxItemsBox, maxItemsField);
+        }
+        if(e.getSource() == checkNumberBox) {
+            eventManager.updateBoxField(checkNumberBox, checkNumberField);
+        }
+        if(e.getSource() == useDimensionsBox) {
+            eventManager.updateBoxField(useDimensionsBox, useDimensionsField);
+        }
+        if(e.getSource() == customerItemCountBox) {
+            eventManager.updateBoxField(customerItemCountBox, customerItemCountField);
+        }
+        if(e.getSource() == randomItemCountBox) {
+            eventManager.updateBox(randomItemCountBox);
+        }
+        if(e.getSource() == singleBackgroundImageBox) {
+            eventManager.updateBox(singleBackgroundImageBox);
+        }
+        if(e.getSource() == randomAmountBox) {
+            eventManager.updateBox(randomAmountBox);
+        }
+        if(e.getSource() == imageOnlyBox) {
+            eventManager.updateBox(imageOnlyBox);
         }
         if(e.getSource() == aifBox) {
-            if(aifBox.isSelected()) {
-                creator.boxSelected(aifBox);
-            }
-            else {
-                creator.boxNotSelected(aifBox);
-            }
+            eventManager.updateBox(aifBox);
+        }
+        if(e.getSource() == aifDebitsOnlyBox) {
+            eventManager.updateBox(aifDebitsOnlyBox);
+        }
+        if(e.getSource() == useTestDataBox) {
+            eventManager.updateBox(useTestDataBox);
+        }
+        if(e.getSource() == recompressBox) {
+            eventManager.updateBox(recompressBox);
+        }
+        if(e.getSource() == useOasisCheckNumberBox) {
+            eventManager.updateBox(useOasisCheckNumberBox);
+        }
+        if(e.getSource() == randomizeAccountsBox) {
+            eventManager.updateBox(randomizeAccountsBox);
+        }
+        if(e.getSource() == upsideDownImageBox) {
+            eventManager.updateBox(upsideDownImageBox);
+        }
+        if(e.getSource() == noSignatureBox) {
+            eventManager.updateBox(noSignatureBox);
+        }
+        if(e.getSource() == noImageBox) {
+            eventManager.updateBox(noImageBox);
+        }
+        if(e.getSource() == noImageRecordBox) {
+            eventManager.updateBox(noImageRecordBox);
+        }
+        if(e.getSource() == randomErrorsBox) {
+            eventManager.updateBox(randomErrorsBox);
         }
         if(e.getSource() == executeButton) {
             boolean valid = true;
-            //need to validate
+            //add validity for rest of basic buttons
             if(cycleNumberBox.isSelected()){
                 try {
                     if(cycleNumberField.getText().equals("")) {
                         cycleNumberField.setText(CYCLENUMBERDEFAULT);
                     }
-                    int d = Integer.parseInt(cycleNumberField.getText());
                 } catch (NumberFormatException nfe) {
                     System.out.println("Cycle Number needs to be an Integer.");
                     performanceText.append("Cycle Number needs to be an Integer.");
@@ -627,7 +641,6 @@ public class UIFramework3 implements ActionListener, MouseListener {
                     if(maxItemsField.getText().equals("")) {
                         maxItemsField.setText(MAXITEMSDEFAULT);
                     }
-                    int f = Integer.parseInt(maxItemsField.getText());
                 } catch (NumberFormatException nfe) {
                     System.out.println("Max Items needs to be an Integer.");
                     performanceText.append("Max Items needs to be an Integer.");
@@ -757,27 +770,37 @@ public class UIFramework3 implements ActionListener, MouseListener {
                 output += "-p "+ selectedLocation;
    
             }
-            if(cycleNumberBox.isSelected() && !cycleNumberField.getText().equals("")) {
-                System.out.println("Cycle Number: " + cycleNumberField.getText());
-                performanceText.append(("\nCycle Number: " + cycleNumberBox.getText()));
-                output += " -c "+ cycleNumberField.getText();
-            }
-            else {
-                output += " -c "+ CYCLENUMBERDEFAULT;
-            }
-            if(maxItemsBox.isSelected()&& !maxItemsField.getText().equals("")) {
-                System.out.println("Max Items: " + maxItemsField.getText());
-                performanceText.append("\nMax Items: " + maxItemsField.getText());
-                output += " --maxitems "+maxItemsField.getText();
-            }
-            else {
-                output += " --maxitems "+MAXITEMSDEFAULT;
-            }
-            if(aifBox.isSelected()) {
-                System.out.println("AIF is selected.");
-                performanceText.append("\nAIF is selected.");
-                output += " --aif";
-            }
+            output += eventManager.getCommandLine(skipBox, skipField, "--skip");
+            output += eventManager.getCommandLine(cycleNumberBox, cycleNumberField, "-c", CYCLENUMBERDEFAULT);
+            output += eventManager.getCommandLine(runBox, runField, "--run");
+            output += eventManager.getCommandLine(maxItemsBox, maxItemsField, "--maxitems", MAXITEMSDEFAULT);
+            output += eventManager.getCommandLine(checkNumberBox, checkNumberField, "--checknumber");
+                //cant find command call for use dimension
+            //output += eventManager.getCommandLine(useDimensionsBox, useDimensionsField, "");
+            output += eventManager.getCommandLine(customerItemCountBox, customerItemCountField, "--customeritemcount");
+            output += eventManager.getCommandLine(randomItemCountBox, "--randomitemcount");
+                //may be wrong command call
+            output += eventManager.getCommandLine(singleBackgroundImageBox, "--singleimage");
+                //cannot find command call for random amount
+            //output += eventManager.getCommandLine(randomAmountBox, "");
+            output += eventManager.getCommandLine(imageOnlyBox, "--imageonly");
+            output += eventManager.getCommandLine(aifBox, "--aif");
+                //cannot find command call for aif debits only
+            //output += eventManager.getCommandLine(aifDebitsOnlyBox, "--aif");
+                //cannot find command call for use test data
+            //output += eventManager.getCommandLine(useTestDataBox, "--");
+                //Cannot find command call for recompress
+            //output += eventManager.getCommandLine(recompressBox, "--aif");
+                //cannot find command call for use oasis check number
+            //output += eventManager.getCommandLine(useOasisCheckNumberBox, "--aif");
+                //cannot find command call for randomize accounts
+            //output += eventManager.getCommandLine(randomizeAccountsBox, "--aif");
+            output += eventManager.getCommandLine(upsideDownImageBox, "--upsidedown");
+            output += eventManager.getCommandLine(noSignatureBox, "--nosignature");
+            output += eventManager.getCommandLine(noImageBox, "--noimage");
+            output += eventManager.getCommandLine(noImageRecordBox, "--noimagerecord");
+            output += eventManager.getCommandLine(randomErrorsBox, "--randomerrors");
+
             System.out.print("CMD Command: " + output + "\n");
             performanceText.append("\nCMD Command: " + output);
    
