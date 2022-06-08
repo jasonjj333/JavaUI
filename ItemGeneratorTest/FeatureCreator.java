@@ -4,12 +4,14 @@ import javax.swing.*;
 import javax.swing.plaf.basic.BasicScrollBarUI;
 import java.awt.*;
 
+
 public class FeatureCreator {
     private Color TEXTCOLOR;
     private Color FOREGROUNDCOLOR;
     private Color DARKTEXTCOLOR;
     private Color BACKGROUNDCOLOR;
-    private Font openSans16;
+    //private Font openSans16;
+    private Font openSans16 = new Font(Font.SERIF,Font.PLAIN, 24);
     public FeatureCreator(Color tcolor, Color fcolor, Color bcolor, Color dtcolor, Font font) {
         TEXTCOLOR = tcolor;
         FOREGROUNDCOLOR = fcolor;
@@ -56,6 +58,7 @@ public class FeatureCreator {
     public void fillPerformanceText(JTextArea performanceText, JScrollPane performanceTextScroller, String label) {
         performanceText.setEditable(false);
         performanceText.setFocusable(false);
+        performanceText.setLineWrap(true);
         performanceTextScroller.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
         performanceTextScroller.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         performanceTextScroller.setBorder(BorderFactory.createEmptyBorder());

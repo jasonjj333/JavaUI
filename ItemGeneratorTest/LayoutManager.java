@@ -31,7 +31,7 @@ public class LayoutManager {
     }
     public void updateComponent(int w, int h) {
         //within vertical bounds
-        if(currentHeight + h + verticalMarginSpace < height) {
+        if(currentHeight + h + verticalMarginSpace + 80 < height) {
             currentHeight+= h + verticalMarginSpace;
             if(furthestWidth < w) {
                 furthestWidth = x+w + horizontalMarginSpace;
@@ -54,7 +54,7 @@ public class LayoutManager {
     }
     public void updateComponent(int w, int h, int hmargin) {
         customHMargin = hmargin;
-        if(currentHeight + h + verticalMarginSpace < height) {
+        if(currentHeight + h + verticalMarginSpace + 80 < height) {
             currentHeight+= h + verticalMarginSpace;
             if(furthestWidth < w) {
                 furthestWidth = x+w;

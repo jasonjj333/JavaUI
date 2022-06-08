@@ -191,14 +191,15 @@ public class UIFramework3 implements ActionListener, MouseListener {
         checkIcon = new ImageIcon("./ItemGeneratorTest/Images/CheckIcon.png");
 
         //Fonts
-        try {
-            openSans16 = Font.createFont(Font.TRUETYPE_FONT, new File("./ItemGeneratorTest/Fonts/OpenSans-Regular.ttf")).deriveFont(16f);
-            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-            ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File("./ItemGeneratorTest/Fonts/OpenSans-Regular.ttf")));
-        }
-        catch(IOException | FontFormatException e) {
-        
-        }
+//        try {
+//            openSans16 = Font.createFont(Font.TRUETYPE_FONT, new File("./ItemGeneratorTest/Fonts/OpenSans-Regular.ttf")).deriveFont(16f);
+//            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+//            ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File("./ItemGeneratorTest/Fonts/OpenSans-Regular.ttf")));
+//        }
+//        catch(IOException | FontFormatException e) {
+//
+//        }
+        openSans16 = new Font(Font.SANS_SERIF,Font.PLAIN, 16);
         //Style
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -356,17 +357,17 @@ public class UIFramework3 implements ActionListener, MouseListener {
         checkNumberField.addMouseListener(this);
 
         //Use Dimensions
-        customizationPanel.add(useDimensionsBox);
-        layout.updateComponent(BOXWIDTH,BOXHEIGHT,BOXMARGIN);
-        useDimensionsBox.setBounds(layout.getX(),layout.getY(), BOXWIDTH, BOXHEIGHT);
-        creator.fillCheckBox(useDimensionsBox,"Use Dimensions");
-        useDimensionsBox.addActionListener(this);
+//        customizationPanel.add(useDimensionsBox);
+//        layout.updateComponent(BOXWIDTH,BOXHEIGHT,BOXMARGIN);
+//        useDimensionsBox.setBounds(layout.getX(),layout.getY(), BOXWIDTH, BOXHEIGHT);
+//        creator.fillCheckBox(useDimensionsBox,"Use Dimensions");
+//        useDimensionsBox.addActionListener(this);
 
-        customizationPanel.add(useDimensionsField);
-        layout.updateHComponent(FIELDWIDTH,FIELDHEIGHT);
-        useDimensionsField.setBounds(layout.getTextX(),layout.getY(),FIELDWIDTH,FIELDHEIGHT);
-        creator.fillField(useDimensionsField, "100x10");
-        useDimensionsField.addMouseListener(this);
+//        customizationPanel.add(useDimensionsField);
+//        layout.updateHComponent(FIELDWIDTH,FIELDHEIGHT);
+//        useDimensionsField.setBounds(layout.getTextX(),layout.getY(),FIELDWIDTH,FIELDHEIGHT);
+//        creator.fillField(useDimensionsField, "100x10");
+//        useDimensionsField.addMouseListener(this);
 
         //Test Data Source
         //..add later
@@ -392,18 +393,18 @@ public class UIFramework3 implements ActionListener, MouseListener {
         randomItemCountBox.addActionListener(this);
 
         //Single Background Image
-        customizationPanel.add(singleBackgroundImageBox);
-        layout.updateComponent(BOXWIDTH,BOXHEIGHT,BOXMARGIN);
-        singleBackgroundImageBox.setBounds(layout.getX(),layout.getY(), BOXWIDTH, BOXHEIGHT);
-        creator.fillCheckBox(singleBackgroundImageBox,"Single Background Image");
-        singleBackgroundImageBox.addActionListener(this);
+//        customizationPanel.add(singleBackgroundImageBox);
+//        layout.updateComponent(BOXWIDTH,BOXHEIGHT,BOXMARGIN);
+//        singleBackgroundImageBox.setBounds(layout.getX(),layout.getY(), BOXWIDTH, BOXHEIGHT);
+//        creator.fillCheckBox(singleBackgroundImageBox,"Single Background Image");
+//        singleBackgroundImageBox.addActionListener(this);
 
         //Random Amount Check Box
-        customizationPanel.add(randomAmountBox);
-        layout.updateComponent(BOXWIDTH, BOXHEIGHT,BOXMARGIN);
-        randomAmountBox.setBounds(layout.getX(),layout.getY(),BOXWIDTH,BOXHEIGHT);
-        creator.fillCheckBox(randomAmountBox, "Random Amount");
-        randomAmountBox.addActionListener(this);
+//        customizationPanel.add(randomAmountBox);
+//        layout.updateComponent(BOXWIDTH, BOXHEIGHT,BOXMARGIN);
+//        randomAmountBox.setBounds(layout.getX(),layout.getY(),BOXWIDTH,BOXHEIGHT);
+//        creator.fillCheckBox(randomAmountBox, "Random Amount");
+//        randomAmountBox.addActionListener(this);
 
         //Image Only Box
         customizationPanel.add(imageOnlyBox);
@@ -420,43 +421,43 @@ public class UIFramework3 implements ActionListener, MouseListener {
         aifBox.addActionListener(this);
 
         //AIF Debits Only
-        customizationPanel.add(aifDebitsOnlyBox);
-        layout.updateComponent(BOXWIDTH, BOXHEIGHT, BOXMARGIN);
-        aifDebitsOnlyBox.setBounds(layout.getX(),layout.getY(), BOXWIDTH, BOXHEIGHT);
-        creator.fillCheckBox(aifDebitsOnlyBox, "AIF Debits Only");
-        aifDebitsOnlyBox.addActionListener(this);
+//        customizationPanel.add(aifDebitsOnlyBox);
+//        layout.updateComponent(BOXWIDTH, BOXHEIGHT, BOXMARGIN);
+//        aifDebitsOnlyBox.setBounds(layout.getX(),layout.getY(), BOXWIDTH, BOXHEIGHT);
+//        creator.fillCheckBox(aifDebitsOnlyBox, "AIF Debits Only");
+//        aifDebitsOnlyBox.addActionListener(this);
 
         //Use Images
         //..do later
 
 
         //Use Test Data
-        customizationPanel.add(useTestDataBox);
-        layout.updateComponent(BOXWIDTH, BOXHEIGHT, BOXMARGIN);
-        useTestDataBox.setBounds(layout.getX(),layout.getY(), BOXWIDTH, BOXHEIGHT);
-        creator.fillCheckBox(useTestDataBox, "Use Test Data");
-        useTestDataBox.addActionListener(this);
+//        customizationPanel.add(useTestDataBox);
+//        layout.updateComponent(BOXWIDTH, BOXHEIGHT, BOXMARGIN);
+//        useTestDataBox.setBounds(layout.getX(),layout.getY(), BOXWIDTH, BOXHEIGHT);
+//        creator.fillCheckBox(useTestDataBox, "Use Test Data");
+//        useTestDataBox.addActionListener(this);
 
         //Recompress
-        customizationPanel.add(recompressBox);
-        layout.updateComponent(BOXWIDTH, BOXHEIGHT, BOXMARGIN);
-        recompressBox.setBounds(layout.getX(),layout.getY(), BOXWIDTH, BOXHEIGHT);
-        creator.fillCheckBox(recompressBox, "Recompress");
-        recompressBox.addActionListener(this);
+//        customizationPanel.add(recompressBox);
+//        layout.updateComponent(BOXWIDTH, BOXHEIGHT, BOXMARGIN);
+//        recompressBox.setBounds(layout.getX(),layout.getY(), BOXWIDTH, BOXHEIGHT);
+//        creator.fillCheckBox(recompressBox, "Recompress");
+//        recompressBox.addActionListener(this);
 
         //Use Oasis Check Number
-        customizationPanel.add(useOasisCheckNumberBox);
-        layout.updateComponent(BOXWIDTH, BOXHEIGHT, BOXMARGIN);
-        useOasisCheckNumberBox.setBounds(layout.getX(),layout.getY(), BOXWIDTH, BOXHEIGHT);
-        creator.fillCheckBox(useOasisCheckNumberBox, "Use Oasis Check Number");
-        useOasisCheckNumberBox.addActionListener(this);
+//        customizationPanel.add(useOasisCheckNumberBox);
+//        layout.updateComponent(BOXWIDTH, BOXHEIGHT, BOXMARGIN);
+//        useOasisCheckNumberBox.setBounds(layout.getX(),layout.getY(), BOXWIDTH, BOXHEIGHT);
+//        creator.fillCheckBox(useOasisCheckNumberBox, "Use Oasis Check Number");
+//        useOasisCheckNumberBox.addActionListener(this);
 
         //Randomize Accounts
-        customizationPanel.add(randomizeAccountsBox);
-        layout.updateComponent(BOXWIDTH, BOXHEIGHT, BOXMARGIN);
-        randomizeAccountsBox.setBounds(layout.getX(),layout.getY(), BOXWIDTH, BOXHEIGHT);
-        creator.fillCheckBox(randomizeAccountsBox, "Randomize Accounts");
-        randomizeAccountsBox.addActionListener(this);
+//        customizationPanel.add(randomizeAccountsBox);
+//        layout.updateComponent(BOXWIDTH, BOXHEIGHT, BOXMARGIN);
+//        randomizeAccountsBox.setBounds(layout.getX(),layout.getY(), BOXWIDTH, BOXHEIGHT);
+//        creator.fillCheckBox(randomizeAccountsBox, "Randomize Accounts");
+//        randomizeAccountsBox.addActionListener(this);
 
         //Upside Down Image
         customizationPanel.add(upsideDownImageBox);
@@ -493,17 +494,18 @@ public class UIFramework3 implements ActionListener, MouseListener {
         creator.fillCheckBox(randomErrorsBox, "Random Errors");
         randomErrorsBox.addActionListener(this);
 
-        //Execute Button
+        //Execute Button HARDCODED LOCATION
         customizationPanel.add(executeButton);
-        layout.updateComponent(BUTTONWIDTH,BUTTONHEIGHT,BOXMARGIN);
-        executeButton.setBounds(layout.getX(), layout.getY(), BUTTONWIDTH, BUTTONHEIGHT);
+        //layout.updateComponent(BUTTONWIDTH,BUTTONHEIGHT,BOXMARGIN);
+        executeButton.setBounds(500, 400, BUTTONWIDTH, BUTTONHEIGHT);
         creator.fillButton(executeButton, "Execute");
+        executeButton.addActionListener(this);
 
-        //Performance text area
-        //customizationPanel.add(performanceTextScroller);
+        //Performance text area HARDCODED LOCATION
+        customizationPanel.add(performanceTextScroller);
         //layout.updateComponent(600,300);
-        // performanceTextScroller.setBounds(380, 25, 600, 300);
-        //creator.fillPerformanceText(performanceText,performanceTextScroller, "Performance Output: ");
+         performanceTextScroller.setBounds(500, 100, 490, 290);
+        creator.fillPerformanceText(performanceText,performanceTextScroller, "Performance Output: ");
 
 
         itemGeneratorFrame.setVisible(true);
@@ -571,9 +573,9 @@ public class UIFramework3 implements ActionListener, MouseListener {
         if(e.getSource() == checkNumberBox) {
             eventManager.updateBoxField(checkNumberBox, checkNumberField);
         }
-        if(e.getSource() == useDimensionsBox) {
-            eventManager.updateBoxField(useDimensionsBox, useDimensionsField);
-        }
+//        if(e.getSource() == useDimensionsBox) {
+//            eventManager.updateBoxField(useDimensionsBox, useDimensionsField);
+//        }
         if(e.getSource() == customerItemCountBox) {
             eventManager.updateBoxField(customerItemCountBox, customerItemCountField);
         }
@@ -583,27 +585,27 @@ public class UIFramework3 implements ActionListener, MouseListener {
         if(e.getSource() == singleBackgroundImageBox) {
             eventManager.updateBox(singleBackgroundImageBox);
         }
-        if(e.getSource() == randomAmountBox) {
-            eventManager.updateBox(randomAmountBox);
-        }
+//        if(e.getSource() == randomAmountBox) {
+//            eventManager.updateBox(randomAmountBox);
+//        }
         if(e.getSource() == imageOnlyBox) {
             eventManager.updateBox(imageOnlyBox);
         }
         if(e.getSource() == aifBox) {
             eventManager.updateBox(aifBox);
         }
-        if(e.getSource() == aifDebitsOnlyBox) {
-            eventManager.updateBox(aifDebitsOnlyBox);
-        }
-        if(e.getSource() == useTestDataBox) {
-            eventManager.updateBox(useTestDataBox);
-        }
-        if(e.getSource() == recompressBox) {
-            eventManager.updateBox(recompressBox);
-        }
-        if(e.getSource() == useOasisCheckNumberBox) {
-            eventManager.updateBox(useOasisCheckNumberBox);
-        }
+//        if(e.getSource() == aifDebitsOnlyBox) {
+//            eventManager.updateBox(aifDebitsOnlyBox);
+//        }
+//        if(e.getSource() == useTestDataBox) {
+//            eventManager.updateBox(useTestDataBox);
+//        }
+//        if(e.getSource() == recompressBox) {
+//            eventManager.updateBox(recompressBox);
+//        }
+//        if(e.getSource() == useOasisCheckNumberBox) {
+//            eventManager.updateBox(useOasisCheckNumberBox);
+//        }
         if(e.getSource() == randomizeAccountsBox) {
             eventManager.updateBox(randomizeAccountsBox);
         }
@@ -623,6 +625,8 @@ public class UIFramework3 implements ActionListener, MouseListener {
             eventManager.updateBox(randomErrorsBox);
         }
         if(e.getSource() == executeButton) {
+            System.out.println("Execute Button Pressed");
+            performanceText.setText("");
             boolean valid = true;
             //add validity for rest of basic buttons
             if(cycleNumberBox.isSelected()){
@@ -652,23 +656,27 @@ public class UIFramework3 implements ActionListener, MouseListener {
                 performanceText.append("Please select output location.");
                 valid = false;
             }
+            System.out.println("Valid = " + valid);
 
             if(valid) {
+                valid = true;
                 performanceText.setText("");
                 System.out.println("Executing...");
                 performanceText.append("Executing...");
-                progress = new JProgressBar(0,Integer.parseInt(maxItemsField.getText()));
-                progress.setStringPainted(true);
-                progress.setForeground(FOREGROUNDCOLOR);
-                progress.setBackground(new Color(59,59,59,255));
-                progress.setBorder(BorderFactory.createEmptyBorder());
-                progress.setFocusable(false);
-                progress.setValue(0);
-                customizationPanel.add(progress);
-                progress.setBounds(performanceTextScroller.getX(), 350, 200, 20);
-                
-                ProgressUpdate updateThread = new ProgressUpdate("update1");
-                updateThread.start();
+//                if(Integer.parseInt(cycleNumberField.getText()) > 49) {
+//                    progress = new JProgressBar(0, Integer.parseInt(maxItemsField.getText()));
+//                    progress.setStringPainted(true);
+//                    progress.setForeground(FOREGROUNDCOLOR);
+//                    progress.setBackground(new Color(59, 59, 59, 255));
+//                    progress.setBorder(BorderFactory.createEmptyBorder());
+//                    progress.setFocusable(false);
+//                    progress.setValue(0);
+//                    customizationPanel.add(progress);
+//                    progress.setBounds(700, 400, 270, 20);
+//
+//                    ProgressUpdate updateThread = new ProgressUpdate("update1");
+//                    updateThread.start();
+//                }
                 ExecuteUpdate executeThread = new ExecuteUpdate("execute1");
                 executeThread.start();
 
@@ -780,7 +788,7 @@ public class UIFramework3 implements ActionListener, MouseListener {
             output += eventManager.getCommandLine(customerItemCountBox, customerItemCountField, "--customeritemcount");
             output += eventManager.getCommandLine(randomItemCountBox, "--randomitemcount");
                 //may be wrong command call
-            output += eventManager.getCommandLine(singleBackgroundImageBox, "--singleimage");
+            //output += eventManager.getCommandLine(singleBackgroundImageBox, "--singleimage");
                 //cannot find command call for random amount
             //output += eventManager.getCommandLine(randomAmountBox, "");
             output += eventManager.getCommandLine(imageOnlyBox, "--imageonly");
@@ -805,7 +813,9 @@ public class UIFramework3 implements ActionListener, MouseListener {
             performanceText.append("\nCMD Command: " + output);
    
             try {
-                excCommand("cd D:\\ItemGen-main\\ItemGenerator\\bin\\Debug && " + output);
+                //excCommand("cd D:\\ItemGen-main\\ItemGenerator\\bin\\Debug && " + output);
+                excCommand("cd .\\bin && " + output);
+
             } catch (IOException e1) {
                 // TODO Auto-generated catch block
                 e1.printStackTrace();
